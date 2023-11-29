@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WaifuCardsBattle
 {
 
-    public class The
+    public class TheWaifu
     {
         private int mau;
         private int cong;
@@ -19,14 +19,14 @@ namespace WaifuCardsBattle
         public int Cong { get => cong; set => cong = value; }
         public int Thu { get => thu; set => thu = value; }
 
-        public The()
+        public TheWaifu()
         {
             this.mau = 0;
             this.cong = 0;
             this.thu = 0;
         }
 
-        public The(int mau, int cong, int thu)
+        public TheWaifu(int mau, int cong, int thu)
         {
             this.mau = mau;
             this.cong = cong;
@@ -36,8 +36,100 @@ namespace WaifuCardsBattle
 
     }
 
+    public class TheKyNang
+    {
+        private int id;
+        private string ten;
+        private string mo_ta;
+
+        public int Id { get => id; set => id = value; }
+        public string Ten { get => ten; set => ten = value; }
+
+        public string Mo_ta { get => mo_ta; set => mo_ta = value; }
+
+        public TheKyNang()
+        {
+            this.id = 0;
+            this.ten = "";
+            this.mo_ta = "";
+        }
+
+        public TheKyNang(int id, string ten, string mo_ta)
+        {
+            this.id = id;
+            this.ten = ten;
+            this.mo_ta = mo_ta;
+        }    
+    }
+
     internal class Program
     {
+
+        static List<int> NgauNhien(int minValue, int maxValue)
+        {
+            List<int> numbers = new List<int>();
+            Random random = new Random();
+
+            for (int i = minValue; i < maxValue; i++)
+            {
+                int randomNumber;
+                do
+                {
+                    randomNumber = random.Next(minValue, maxValue);
+                } while (numbers.Contains(randomNumber));
+
+                numbers.Add(randomNumber);
+            }
+
+            return numbers;
+        }
+
+        static TheWaifu Itsuka_Kotori = new TheWaifu(100, 10, 1);
+        static TheWaifu Tokisaki_Kurumi = new TheWaifu(100, 10, 1);
+
+        static TheKyNang KyNangTanCong = new TheKyNang(1, "Tấn Công", "Thẻ Tấn Công: Tấn công với sức tấn công bằng chỉ số công hiện tại.");
+        static public int TanCong(int cong, int thu, int mau)
+        {
+            if ((cong - thu) <= 0)
+                return 0;
+            else
+                return mau - (cong - thu);
+        }
+
+        static TheKyNang KyNangHoiMau = new TheKyNang(2, "Hồi Máu", "Thẻ Hồi Máu: Hồi máu với 20% máu tối đa hiện tại.");
+        static public int HoiMau(int mau)
+        {
+            if ((mau + ((mau * 20) / 100)) >= 100)
+                return 100;
+            else
+                return mau + (mau* 20) / 100;
+        }
+
+        static TheKyNang KyNangPhongThu = new TheKyNang(3, "Phòng Thủ", "Thẻ Phòng Thủ: Tăng phòng thủ hiện tại lên 1.");
+        static public int PhongThu(int thu)
+        {
+            return ++thu;
+        }
+
+        static TheKyNang KyNangTangCuong = new TheKyNang(4, "Tăng Cường", "Thẻ Tăng Cường: Tăng tấn công hiện tại lên 1.");
+        static public int TangCuong(int cong)
+        {
+            return ++cong;
+        }
+
+        static TheKyNang KyNangGiamSucManh = new TheKyNang(5, "Giảm Sức Mạnh", "Thẻ Giảm Sức Mạnh: Giảm một nửa sức tấn công của đối thủ trong lượt kế. Khi kết thúc lượt nhân đôi sức tấn công hiện tại.");
+        static public int GiamSucManh(int cong)
+        {
+            return cong / 2;
+        }
+        static bool giam_cong_nguoi_choi = false;
+        static bool giam_cong_may = false;
+
+
+        static TheKyNang[] MangKyNang = new TheKyNang[100];
+        static TheKyNang[] MangKyNangAI = new TheKyNang[100];
+
+
 
         static void Main(string[] args)
         {
@@ -51,6 +143,7 @@ namespace WaifuCardsBattle
 
             while (true)
             {
+                
                 Console.SetCursorPosition(5, 5);
                 Console.WriteLine("Waifu Cards Battle");
                 Console.SetCursorPosition(7, 7);
@@ -123,10 +216,6 @@ namespace WaifuCardsBattle
             Environment.Exit(0);
         }
 
-        static The Itsuka_Kotori = new The(100, 10, 1);
-        static The Tokisaki_Kurumi = new The(100, 10, 1);
-        static bool giam_cong_nguoi_choi = false;
-        static bool giam_cong_may = false;
         static void Choi()
         {
             string van_dau = "";
@@ -134,8 +223,79 @@ namespace WaifuCardsBattle
             int x = 25, y = 17;
             int x_tam, y_tam;
 
+            Random rd = new Random();
+            int gia_tri_luot_di = rd.Next(1, 3);
+
+            if (gia_tri_luot_di == 1)
+                luot_di = true;
+            else
+                luot_di = false;
+
+            List<int> numbers = NgauNhien(1, 6);
+
+            int dem = 0;
+            foreach (int number in numbers)
+            {
+                dem++;
+                switch (number)
+                {
+                    case 1:
+                        MangKyNang[dem] = KyNangTanCong;
+                        break;
+                    case 2:
+                        MangKyNang[dem] = KyNangHoiMau;
+                        break;
+                    case 3:
+                        MangKyNang[dem] = KyNangPhongThu;
+                        break;
+                    case 4:
+                        MangKyNang[dem] = KyNangTangCuong;
+                        break;
+                    case 5:
+                        MangKyNang[dem] = KyNangGiamSucManh;
+                        break;
+                }    
+                    
+                if (dem == 4)
+                    break;
+            }
+
+            
+            List<int> numbersAI = NgauNhien(1, 6);
+
+            int demAI = 0;
+            foreach (int numberAI in numbersAI)
+            {
+                demAI++;
+                switch (numberAI)
+                {
+                    case 1:
+                        MangKyNangAI[demAI] = KyNangTanCong;
+                        break;
+                    case 2:
+                        MangKyNangAI[demAI] = KyNangHoiMau;
+                        break;
+                    case 3:
+                        MangKyNangAI[demAI] = KyNangPhongThu;
+                        break;
+                    case 4:
+                        MangKyNangAI[demAI] = KyNangTangCuong;
+                        break;
+                    case 5:
+                        MangKyNangAI[demAI] = KyNangGiamSucManh;
+                        break;
+                }
+
+                if (demAI == 4)
+                    break;
+            }
+
             while (true)
             {
+                if (Itsuka_Kotori.Mau <= 0)
+                    GameOver();
+                if (Tokisaki_Kurumi.Mau <= 0)
+                    ChienThang();
                 if (luot_di == true)
                     van_dau = "Lượt của bạn!";
                 else
@@ -150,13 +310,13 @@ namespace WaifuCardsBattle
                 Console.SetCursorPosition(25, 15);
                 Console.WriteLine("Thẻ: Itsuka Kotori(DAL) Máu: "+ Itsuka_Kotori.Mau + " Công: "+ Itsuka_Kotori.Cong + " Thủ: "+ Itsuka_Kotori.Thu);
                 Console.SetCursorPosition(27, 17);
-                Console.WriteLine("Tấn công");
+                Console.WriteLine(MangKyNang[1].Ten);
                 Console.SetCursorPosition(27, 19);
-                Console.WriteLine("Hồi máu");
+                Console.WriteLine(MangKyNang[2].Ten);
                 Console.SetCursorPosition(27, 21);
-                Console.WriteLine("Phòng thủ");
+                Console.WriteLine(MangKyNang[3].Ten);
                 Console.SetCursorPosition(27, 23);
-                Console.WriteLine("Giảm sức mạnh");
+                Console.WriteLine(MangKyNang[4].Ten);
 
                 Console.SetCursorPosition(x, y);
                 Console.Write("->");
@@ -197,40 +357,35 @@ namespace WaifuCardsBattle
                         case ConsoleKey.K:
                             if (y == 17)
                             {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng tấn công!";
-                                KyNang(1, luot_di);
+                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[1].Ten+ "!";
+                                KyNang(MangKyNang[1].Id, luot_di);
                             }
 
                             if (y == 19)
                             {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng hồi máu!";
-                                KyNang(2, luot_di);
+                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[2].Ten + "!";
+                                KyNang(MangKyNang[2].Id, luot_di);
                             }
 
                             if (y == 21)
                             {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng phòng thủ!";
-                                KyNang(3, luot_di);
+                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[3].Ten + "!";
+                                KyNang(MangKyNang[3].Id, luot_di);
                             }
 
                             if (y == 23)
                             {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng giảm sức mạnh!";
-                                KyNang(4, luot_di);
+                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[4].Ten + "!";
+                                KyNang(MangKyNang[4].Id, luot_di);
                             }
                             luot_di = !luot_di;
                             Console.SetCursorPosition(25, 10);
                             for (int i = 0; i < van_dau_tam.Length; i++)
                                 Console.WriteLine(" ");
                             Console.SetCursorPosition(25, 10);
-                            Console.WriteLine(van_dau);
+                            Console.WriteLine(van_dau);                            
                             Thread.Sleep(1000);
-                            if (giam_cong_nguoi_choi == true)
-                            {
-                                giam_cong_nguoi_choi = false;
-                                Itsuka_Kotori.Cong *= 2;
-                            }    
-                               
+                            HieuUngXau(luot_di);
                             Console.Clear();
                             break;
 
@@ -241,43 +396,38 @@ namespace WaifuCardsBattle
                 else
                 {
                     Thread.Sleep(1000);
-
                     int id = AI();
                     if (id == 1)
                     {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng tấn công!";
-                        KyNang(1, luot_di);
+                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
+                        KyNang(MangKyNangAI[1].Id, luot_di);
                     }
 
                     if (id == 2)
                     {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng hồi máu!";
-                        KyNang(2, luot_di);
+                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
+                        KyNang(MangKyNangAI[2].Id, luot_di);
                     }
 
                     if (id == 3)
                     {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng phòng thủ!";
-                        KyNang(3, luot_di);
+                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
+                        KyNang(MangKyNangAI[3].Id, luot_di);
                     }
 
                     if (id == 4)
                     {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng giảm sức mạnh!";
-                        KyNang(4, luot_di);
+                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
+                        KyNang(MangKyNangAI[4].Id, luot_di);
                     }
                     luot_di = !luot_di;
                     Console.SetCursorPosition(25, 10);
                     for (int i = 0; i < van_dau_tam.Length; i++)
                         Console.WriteLine(" ");
                     Console.SetCursorPosition(25, 10);
-                    Console.WriteLine(van_dau);
+                    Console.WriteLine(van_dau);                  
                     Thread.Sleep(1000);
-                    if (giam_cong_may == true)
-                    {
-                        giam_cong_may = false;
-                        Tokisaki_Kurumi.Cong *= 2;
-                    }
+                    HieuUngXau(luot_di);
                     Console.Clear();
                 }
                     
@@ -291,7 +441,7 @@ namespace WaifuCardsBattle
         static int AI()
         {
             Random rd = new Random();
-            return rd.Next(1,4);
+            return rd.Next(1,5);
         }
 
         static void ThongTin(int id)
@@ -302,16 +452,16 @@ namespace WaifuCardsBattle
                 switch (id)
                 {
                     case 1:
-                        Console.WriteLine("Thẻ Tấn Công: Tấn công với sức tấn công bằng chỉ số công hiện tại.");
+                        Console.WriteLine(MangKyNang[1].Mo_ta);
                         break;
                     case 2:
-                        Console.WriteLine("Thẻ Hồi Máu: Hồi máu với 20% máu tối đa hiện tại.");
+                        Console.WriteLine(MangKyNang[2].Mo_ta);
                         break;
                     case 3:
-                        Console.WriteLine("Thẻ Phòng Thủ: Tăng phòng thủ hiện tại lên 1.");
+                        Console.WriteLine(MangKyNang[3].Mo_ta);
                         break;
                     case 4:
-                        Console.WriteLine("Thẻ Giảm Sức Mạnh: Giảm một nửa sức tấn công của đối phương ở lượt kế.");
+                        Console.WriteLine(MangKyNang[4].Mo_ta);
                         break;
                 }
                 Console.SetCursorPosition(5, 5);
@@ -333,57 +483,81 @@ namespace WaifuCardsBattle
             {
                 case 1:
                     if (luot_di == true)
-                    {
-                        int suc_tan_cong = Itsuka_Kotori.Cong - Tokisaki_Kurumi.Thu;
-                        if(suc_tan_cong > 0)
-                            Tokisaki_Kurumi.Mau -= suc_tan_cong;
-                    }    
-                       
+                        Tokisaki_Kurumi.Mau = TanCong(Itsuka_Kotori.Cong, Tokisaki_Kurumi.Thu, Tokisaki_Kurumi.Mau);
                     else
-                    {
-                        int suc_tan_cong = Tokisaki_Kurumi.Cong - Itsuka_Kotori.Thu;
-                        if (suc_tan_cong > 0)
-                            Itsuka_Kotori.Mau -= Tokisaki_Kurumi.Cong - Itsuka_Kotori.Thu;
-                    }    
-                        
+                        Itsuka_Kotori.Mau = TanCong(Tokisaki_Kurumi.Cong, Itsuka_Kotori.Thu, Itsuka_Kotori.Mau);
                     break;
                 case 2:
                     if (luot_di == true)
-                    {
-                        Itsuka_Kotori.Mau += (Itsuka_Kotori.Mau * 20) / 100;
-                        if (Itsuka_Kotori.Mau > 100)
-                            Itsuka_Kotori.Mau = 100;
-                    }    
+                        Itsuka_Kotori.Mau = HoiMau(Itsuka_Kotori.Mau);
                     else
-                    {
-                        Tokisaki_Kurumi.Mau += (Tokisaki_Kurumi.Mau * 20) / 100;
-                        if (Tokisaki_Kurumi.Mau > 100)
-                            Tokisaki_Kurumi.Mau = 100;
-                    }    
+                        Tokisaki_Kurumi.Mau = HoiMau(Tokisaki_Kurumi.Mau);
                     break;
                 case 3:
                     if (luot_di == true)
-                        Itsuka_Kotori.Thu++;
+                        Itsuka_Kotori.Thu = PhongThu(Itsuka_Kotori.Thu);
                     else
-                        Tokisaki_Kurumi.Thu++;
+                        Tokisaki_Kurumi.Thu = PhongThu(Tokisaki_Kurumi.Thu);
                     break;
                 case 4:
                     if (luot_di == true)
+                        Itsuka_Kotori.Cong = TangCuong(Itsuka_Kotori.Cong);
+                    else
+                        Tokisaki_Kurumi.Cong = TangCuong(Tokisaki_Kurumi.Cong);
+                    break;
+                case 5:
+                    if (luot_di == true)
                     {
-                        Tokisaki_Kurumi.Cong -= Tokisaki_Kurumi.Cong / 2;
+                        Tokisaki_Kurumi.Cong = GiamSucManh(Tokisaki_Kurumi.Cong);
                         giam_cong_may = true;
                     }    
-                       
                     else
                     {
-                        Itsuka_Kotori.Cong -= Itsuka_Kotori.Cong / 2;
+                        Itsuka_Kotori.Cong = GiamSucManh(Itsuka_Kotori.Cong);
                         giam_cong_nguoi_choi = true;
                     }    
-                        
                     break;
             }
         }
 
+        static void HieuUngXau(bool kiem_tra)
+        {
+            if (kiem_tra == true)
+            {
+                if (giam_cong_may == true)
+                {
+                    giam_cong_may = false;
+                    Tokisaki_Kurumi.Cong *= 2;
+                }
+            }
+            else
+            {
+                if (giam_cong_nguoi_choi == true)
+                {
+                    giam_cong_nguoi_choi = false;
+                    Itsuka_Kotori.Cong *= 2;
+                }
+            }
+            
+        }
+
+        static void GameOver()
+        {
+            Console.Clear();
+            Console.SetCursorPosition(5, 5);
+            Console.WriteLine("GAME OVER");
+            Thread.Sleep(3000);
+            menu();
+        }
+
+        static void ChienThang()
+        {
+            Console.Clear();
+            Console.SetCursorPosition(5, 5);
+            Console.WriteLine("CHIEN THANG");
+            Thread.Sleep(3000);
+            menu();
+        }
 
     }
 }
