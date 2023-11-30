@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WaifuCardsBattle
 {
-
+    // Waifu Cards Battle Code viết bởi Tomi Sakae (https://github.com/Tomi-Sakae/WaifuCardsBattle)
     public class TheWaifu
     {
         private int mau;
@@ -91,11 +91,15 @@ namespace WaifuCardsBattle
             dem_thoi_gian = 0;
             giam_cong_nguoi_choi = false;
             giam_cong_may = false;
+            giam_thu_nguoi_choi = false;
+            giam_thu_may = false;
+            tang_cong_nguoi_choi = false;
+            tang_cong_may = false;
         }
 
         static Random random = new Random();
         static Random rd = new Random();
-        static List<int> NgauNhien(int minValue, int maxValue)
+        static List<int> NgauNhien(int minValue, int maxValue) // Hàm chọn số ngẫu nhiên trong khoảng với điều kiện không trùng nhau
         {
             List<int> numbers = new List<int>();
 
@@ -158,10 +162,10 @@ namespace WaifuCardsBattle
         }
 
         static TheKyNang KyNangHoiMau = new TheKyNang(2, "Hồi Máu", "Thẻ Hồi Máu: Hồi máu với 20% máu hiện tại.");
-        static public int HoiMau(int mau)
+        static public int HoiMau(int mau, int mau_toi_da)
         {
-            if ((mau + ((mau * 20) / 100)) >= 100)
-                return 100;
+            if ((mau + ((mau * 20) / 100)) >= mau_toi_da)
+                return mau_toi_da;
             else
                 return mau + (mau* 20) / 100;
         }
@@ -189,16 +193,56 @@ namespace WaifuCardsBattle
         static TheKyNang KyNangHoiPhuc = new TheKyNang(6, "Hồi Phục", "Thẻ Hồi Phục: Hồi máu với 20% máu tối đa hiện tại.");
         static public int HoiPhuc(int mau, int mau_toi_da)
         {
-            if ((mau + ((mau_toi_da * 20) / 100)) >= 100)
-                return 100;
+            if ((mau + ((mau_toi_da * 20) / 100)) >= mau_toi_da)
+                return mau_toi_da;
             else
                 return mau + (mau_toi_da * 20) / 100;
         }
 
+        static TheKyNang KyNangChucPhucCuaThienThan = new TheKyNang(7, "Chúc Phúc Của Thiên Thần", "Thẻ Chúc Phúc Của Thiên Thần: Tăng 10% máu tối đa.");
+        static public int ChucPhucCuaThienThan(int mau_toi_da)
+        {
+            return mau_toi_da + (mau_toi_da * 10) / 100;
+        }
+
+        static TheKyNang KyNangTanCongChiMang = new TheKyNang(8, "Tấn Công Chí Mạng", "Thẻ Tấn Công Chí Mạng: Tấn công đối thủ với X2 sức tấn công.");
+        static public int TanCongChiMang(int cong, int thu, int mau)
+        {
+            if ((cong*2 - thu) <= 0)
+                return 0;
+            else
+                return mau - (cong*2 - thu);
+        }
+
+        static TheKyNang KyNangPhaGiap = new TheKyNang(9, "Phá Giáp", "Thẻ Phá Giáp: Làm chỉ số phòng thủ của đối thủ giảm về 0 ở lượt kế.");
+        static public int PhaGiap()
+        {
+            return 0;
+        }
+
+        static bool giam_thu_nguoi_choi = false;
+        static bool giam_thu_may = false;
+        static int luu_thu_nguoi_choi;
+        static int luu_thu_may;
+        static int luu_dem_pha_giap_nguoi_choi;
+        static int luu_dem_pha_giap_may;
+
+        static TheKyNang KyNangSieuTangCuong = new TheKyNang(10, "Siêu Tăng Cường", "Thẻ Siêu Tăng Cường: X2 chỉ số tấn công hiện tại ở lượt kế.");
+        static public int SieuTangCuong(int cong)
+        {
+            return cong*2;
+        }
+
+        static bool tang_cong_nguoi_choi = false;
+        static bool tang_cong_may = false;
+        static int luu_cong_nguoi_choi;
+        static int luu_cong_may;
+        static int luu_dem_sieu_tang_cuong_nguoi_choi;
+        static int luu_dem_sieu_tang_cuong_may;
 
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 6;
+        static int so_luong_ky_nang = 10;
 
 
         static void Main(string[] args)
@@ -402,6 +446,30 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangHoiPhuc;
                         break;
+                    case 7:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangChucPhucCuaThienThan;
+                        else
+                            LuuKyNang[dem - 4] = KyNangChucPhucCuaThienThan;
+                        break;
+                    case 8:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangTanCongChiMang;
+                        else
+                            LuuKyNang[dem - 4] = KyNangTanCongChiMang;
+                        break;
+                    case 9:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangPhaGiap;
+                        else
+                            LuuKyNang[dem - 4] = KyNangPhaGiap;
+                        break;
+                    case 10:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangSieuTangCuong;
+                        else
+                            LuuKyNang[dem - 4] = KyNangSieuTangCuong;
+                        break;
                 }
             }
 
@@ -450,6 +518,30 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangHoiPhuc;
                         break;
+                    case 7:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangChucPhucCuaThienThan;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangChucPhucCuaThienThan;
+                        break;
+                    case 8:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangTanCongChiMang;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangTanCongChiMang;
+                        break;
+                    case 9:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangPhaGiap;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangPhaGiap;
+                        break;
+                    case 10:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangSieuTangCuong;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangSieuTangCuong;
+                        break;
                 }
             }
 
@@ -460,10 +552,11 @@ namespace WaifuCardsBattle
             /*
             for(int test = 1; test <= 4; test++)
             {
-                MangKyNang[test] = ...;
-                MangKyNangAI[test] = ...;
+                MangKyNang[test] = KyNangSieuTangCuong;
+                MangKyNangAI[test] = KyNangSieuTangCuong;
             }
             */
+            
 
 
             int luu_vi_tri = 0;
@@ -657,7 +750,7 @@ namespace WaifuCardsBattle
                             Console.SetCursorPosition(25, 10);
                             Console.WriteLine(van_dau);                            
                             Thread.Sleep(1000);
-                            HieuUngXau(luot_di);
+                            HieuUng(luot_di);
                             Console.Clear();
                             break;
 
@@ -713,7 +806,7 @@ namespace WaifuCardsBattle
                     Console.SetCursorPosition(25, 10);
                     Console.WriteLine(van_dau);                  
                     Thread.Sleep(1000);
-                    HieuUngXau(luot_di);
+                    HieuUng(luot_di);
                     Console.Clear();
                 }
                     
@@ -780,9 +873,9 @@ namespace WaifuCardsBattle
                     break;
                 case 2:
                     if (luot_di == true)
-                        Nguoi.Mau = HoiMau(Nguoi.Mau);
+                        Nguoi.Mau = HoiMau(Nguoi.Mau, nguoi_mau_toi_da);
                     else
-                        AI.Mau = HoiMau(AI.Mau);
+                        AI.Mau = HoiMau(AI.Mau, may_mau_toi_da);
                     break;
                 case 3:
                     if (luot_di == true)
@@ -814,6 +907,51 @@ namespace WaifuCardsBattle
                     else
                         AI.Mau = HoiPhuc(AI.Mau, may_mau_toi_da);
                     break;
+                case 7:
+                    if (luot_di == true)
+                        nguoi_mau_toi_da = ChucPhucCuaThienThan(nguoi_mau_toi_da);
+                    else
+                        may_mau_toi_da = ChucPhucCuaThienThan(may_mau_toi_da);
+                    break;
+                case 8:
+                    if (luot_di == true)
+                        AI.Mau = TanCongChiMang(Nguoi.Cong, AI.Thu, AI.Mau);
+                    else
+                        Nguoi.Mau = TanCongChiMang(AI.Cong, Nguoi.Thu, Nguoi.Mau);
+                    break;
+                case 9:
+                    if (luot_di == true)
+                    {
+                        luu_thu_may = AI.Thu;
+                        AI.Thu = PhaGiap();
+                        giam_thu_may = true;
+                        luu_dem_pha_giap_may = 2;
+                    }    
+                    else
+                    {
+                        luu_thu_nguoi_choi = Nguoi.Thu;
+                        Nguoi.Thu = PhaGiap();
+                        giam_thu_nguoi_choi = true;
+                        luu_dem_pha_giap_nguoi_choi = 2;
+                    }    
+                    break;
+                case 10:
+                    if (luot_di == true)
+                    {
+                        luu_cong_nguoi_choi = Nguoi.Cong;
+                        Nguoi.Cong = SieuTangCuong(Nguoi.Cong);
+                        tang_cong_nguoi_choi = true;
+                        luu_dem_sieu_tang_cuong_nguoi_choi = 2;
+                    }                           
+                    else
+                    {
+                        luu_cong_may = AI.Cong;
+                        AI.Cong = SieuTangCuong(AI.Cong);
+                        tang_cong_may = true;
+                        luu_dem_sieu_tang_cuong_may = 2;
+                    }    
+                       
+                    break;
             }
         }
 
@@ -836,35 +974,84 @@ namespace WaifuCardsBattle
             }
         }
 
-        static void HieuUngXau(bool kiem_tra)
+        static void HieuUng(bool kiem_tra)
         {
-            if (kiem_tra == true)
+            if (kiem_tra == true) // Người
             {
-                if (giam_cong_may == true)
+                if (giam_cong_may == true) // 1 lượt thì bình thường
                 {
                     giam_cong_may = false;
                     AI.Cong *= 2;
                 }
+
                 if (thoi_gian_nguoi_choi == false)
                 {
                     if (dem_thoi_gian == 0)
                         thoi_gian_nguoi_choi = true;
                     dem_thoi_gian--;
                 }
+
+                if (giam_thu_nguoi_choi == true) // 2 lượt thì đảo lại hiệu ứng của máy để bên người và hiệu ứng người để bên máy
+                {
+                    if (luu_dem_pha_giap_nguoi_choi == 1)
+                    {
+                        giam_thu_nguoi_choi = false;
+                        Nguoi.Thu = luu_thu_nguoi_choi;
+                    }
+                    else
+                        luu_dem_pha_giap_nguoi_choi--;
+                }
+
+                if (tang_cong_may == true) // 2 lượt
+                {
+                    if (luu_dem_sieu_tang_cuong_may == 1)
+                    {
+                        tang_cong_may = false;
+                        AI.Cong = luu_cong_may;
+                    }
+                    else
+                        luu_dem_sieu_tang_cuong_may--;
+                }
+
+
             }
-            else
+            else // Máy
             {
-                if (giam_cong_nguoi_choi == true)
+                if (giam_cong_nguoi_choi == true) // 1 lượt
                 {
                     giam_cong_nguoi_choi = false;
                     Nguoi.Cong *= 2;
                 }
+
                 if (thoi_gian_may == false)
                 {
                     if (dem_thoi_gian == 0)
                         thoi_gian_may = true;
                     dem_thoi_gian--;
                 }
+
+                if (giam_thu_may == true) // 2 lượt
+                {
+                    if (luu_dem_pha_giap_may == 1)
+                    {
+                        giam_thu_may = false;
+                        AI.Thu = luu_thu_may;
+                    }
+                    else
+                        luu_dem_pha_giap_may--;
+                }
+
+                if (tang_cong_nguoi_choi == true) // 2 lượt
+                {
+                    if (luu_dem_sieu_tang_cuong_nguoi_choi == 1)
+                    {
+                        tang_cong_nguoi_choi = false;
+                        Nguoi.Cong = luu_cong_nguoi_choi;
+                    }
+                    else
+                        luu_dem_sieu_tang_cuong_nguoi_choi--;
+                }
+ 
             }
             
         }
