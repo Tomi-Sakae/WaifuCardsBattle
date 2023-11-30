@@ -79,7 +79,6 @@ namespace WaifuCardsBattle
 
     internal class Program
     {
-
         static void Reset()
         {
             random = new Random();
@@ -292,6 +291,12 @@ namespace WaifuCardsBattle
         static int may_mau_toi_da;
         static bool kiem_tra_ky_nangAI = true;
         static int luu_id_nguoi;
+
+        static TheKyNang[] LuuKyNang = new TheKyNang[100];
+        static TheKyNang[] LuuKyNangAI = new TheKyNang[100];
+
+        static TheKyNang[] DaDungKyNang = new TheKyNang[100];
+        static TheKyNang[] DaDungKyNangAI = new TheKyNang[100];
         static void Choi()
         {
             string van_dau = "";
@@ -362,27 +367,42 @@ namespace WaifuCardsBattle
                 switch (number)
                 {
                     case 1:
-                        MangKyNang[dem] = KyNangTanCong;
+                        if(dem <= 4)
+                            MangKyNang[dem] = KyNangTanCong;
+                        else
+                            LuuKyNang[dem - 4] = KyNangTanCong;
                         break;
                     case 2:
-                        MangKyNang[dem] = KyNangHoiMau;
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangHoiMau;
+                        else
+                            LuuKyNang[dem - 4] = KyNangHoiMau;
                         break;
                     case 3:
-                        MangKyNang[dem] = KyNangPhongThu;
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangPhongThu;
+                        else
+                            LuuKyNang[dem - 4] = KyNangPhongThu;
                         break;
                     case 4:
-                        MangKyNang[dem] = KyNangTangCuong;
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangTangCuong;
+                        else
+                            LuuKyNang[dem - 4] = KyNangTangCuong;
                         break;
                     case 5:
-                        MangKyNang[dem] = KyNangGiamSucManh;
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangGiamSucManh;
+                        else
+                            LuuKyNang[dem - 4] = KyNangGiamSucManh;
                         break;
                     case 6:
-                        MangKyNang[dem] = KyNangHoiPhuc;
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangHoiPhuc;
+                        else
+                            LuuKyNang[dem - 4] = KyNangHoiPhuc;
                         break;
-                }    
-                    
-                if (dem == 4)
-                    break;
+                }
             }
 
             
@@ -395,34 +415,116 @@ namespace WaifuCardsBattle
                 switch (numberAI)
                 {
                     case 1:
-                        MangKyNangAI[demAI] = KyNangTanCong;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangTanCong;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangTanCong;
                         break;
                     case 2:
-                        MangKyNangAI[demAI] = KyNangHoiMau;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangHoiMau;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangHoiMau;
                         break;
                     case 3:
-                        MangKyNangAI[demAI] = KyNangPhongThu;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangPhongThu;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangPhongThu;
                         break;
                     case 4:
-                        MangKyNangAI[demAI] = KyNangTangCuong;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangTangCuong;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangTangCuong;
                         break;
                     case 5:
-                        MangKyNangAI[demAI] = KyNangGiamSucManh;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangGiamSucManh;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangGiamSucManh;
                         break;
                     case 6:
-                        MangKyNangAI[demAI] = KyNangHoiPhuc;
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangHoiPhuc;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangHoiPhuc;
                         break;
                 }
-
-                if (demAI == 4)
-                    break;
             }
 
             nguoi_mau_toi_da = Nguoi.Mau;
             may_mau_toi_da = AI.Mau;
 
+            //Debug Code
+            /*
+            for(int test = 1; test <= 4; test++)
+            {
+                MangKyNang[test] = ...;
+                MangKyNangAI[test] = ...;
+            }
+            */
+
+
+            int luu_vi_tri = 0;
+            int kiem_tra_thu_tu = 0;
+            bool kiem_tra_hanh_dong = false;
+
+            int kiem_tra_thu_tu_da_dung = 0;
+            int kiem_tra_thu_tu_da_dungAI = 0;
+
+            int luu_vi_triAI = 0;
+            int kiem_tra_thu_tuAI = 0;
+            bool kiem_tra_hanh_dongAI = false;
+
             while (true)
             {
+                if (kiem_tra_hanh_dong == true)
+                {
+                    kiem_tra_thu_tu_da_dung++;
+                    DaDungKyNang[kiem_tra_thu_tu_da_dung] = MangKyNang[luu_vi_tri];
+
+                    kiem_tra_thu_tu++;
+                    kiem_tra_hanh_dong = false;
+
+                    if (kiem_tra_thu_tu <= so_luong_ky_nang - 4)        
+                        MangKyNang[luu_vi_tri] = LuuKyNang[kiem_tra_thu_tu];
+                    else
+                    {
+                        MangKyNang[luu_vi_tri] = DaDungKyNang[1];
+                        
+                        for (int i = 1; i <= so_luong_ky_nang - 4; i++)
+                            DaDungKyNang[i] = DaDungKyNang[i + 1];
+
+                        kiem_tra_thu_tu_da_dung--;
+                        kiem_tra_thu_tu--;
+                    }    
+
+                }
+
+                
+                if (kiem_tra_hanh_dongAI == true)
+                {
+                    kiem_tra_thu_tu_da_dungAI++;
+                    DaDungKyNangAI[kiem_tra_thu_tu_da_dungAI] = MangKyNangAI[luu_vi_triAI];
+
+                    kiem_tra_thu_tuAI++;
+                    kiem_tra_hanh_dongAI = false;
+
+                    if (kiem_tra_thu_tuAI <= so_luong_ky_nang - 4)
+                        MangKyNangAI[luu_vi_triAI] = LuuKyNangAI[kiem_tra_thu_tuAI];
+                    else
+                    {
+                        MangKyNangAI[luu_vi_triAI] = DaDungKyNangAI[1];
+
+                        for (int i = 1; i <= so_luong_ky_nang - 4; i++)
+                            DaDungKyNangAI[i] = DaDungKyNangAI[i + 1];
+
+                        kiem_tra_thu_tu_da_dungAI--;
+                        kiem_tra_thu_tuAI--;
+                    }    
+                }
+                
                 if (Nguoi.Mau <= 0)
                     GameOver();
                 if (AI.Mau <= 0)
@@ -514,24 +616,32 @@ namespace WaifuCardsBattle
                             {
                                 van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[1].Ten+ "!";
                                 KyNang(MangKyNang[1].Id, luot_di);
+                                luu_vi_tri = 1;
+                                kiem_tra_hanh_dong = true;
                             }
 
                             if (y == 19)
                             {
                                 van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[2].Ten + "!";
                                 KyNang(MangKyNang[2].Id, luot_di);
+                                luu_vi_tri = 2;
+                                kiem_tra_hanh_dong = true;
                             }
 
                             if (y == 21)
                             {
                                 van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[3].Ten + "!";
                                 KyNang(MangKyNang[3].Id, luot_di);
+                                luu_vi_tri = 3;
+                                kiem_tra_hanh_dong = true;
                             }
 
                             if (y == 23)
                             {
                                 van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[4].Ten + "!";
                                 KyNang(MangKyNang[4].Id, luot_di);
+                                luu_vi_tri = 4;
+                                kiem_tra_hanh_dong = true;
                             }
                             if (y == 25)
                             {
@@ -563,24 +673,32 @@ namespace WaifuCardsBattle
                     {
                         van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
                         KyNang(MangKyNangAI[1].Id, luot_di);
+                        luu_vi_triAI = 1;
+                        kiem_tra_hanh_dongAI = true;
                     }
 
                     if (id == 2)
                     {
                         van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
                         KyNang(MangKyNangAI[2].Id, luot_di);
+                        luu_vi_triAI = 2;
+                        kiem_tra_hanh_dongAI = true;
                     }
 
                     if (id == 3)
                     {
                         van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
                         KyNang(MangKyNangAI[3].Id, luot_di);
+                        luu_vi_triAI = 3;
+                        kiem_tra_hanh_dongAI = true;
                     }
 
                     if (id == 4)
                     {
                         van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
                         KyNang(MangKyNangAI[4].Id, luot_di);
+                        luu_vi_triAI = 4;
+                        kiem_tra_hanh_dongAI = true;
                     }
                     if (id == 5)
                     {
