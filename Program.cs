@@ -80,10 +80,25 @@ namespace WaifuCardsBattle
     internal class Program
     {
 
+        static void Reset()
+        {
+            random = new Random();
+            rd = new Random();
+            Itsuka_Kotori = new TheWaifu(100, 10, 1, "Itsuka Kotori", 1, "Pháo Hỏa Ngục", "Pháo Hỏa Ngục: Bắn một tia lửa có nhiệt lượng cực cao vào đối thủ gây 500% sát thương so với sức tấn công hiện tại.");
+            Tokisaki_Kurumi = new TheWaifu(100, 10, 1, "Tokisaki Kurumi", 2, "Điều Chỉnh Thời Gian", "Điều Chỉnh Thời Gian: Ngưng động thời gian của đối thủ. Được phép hành động trong 5 lượt liên tiếp.");
+            kiem_tra_ky_nangAI = true;
+            thoi_gian_may = true;
+            thoi_gian_nguoi_choi = true;
+            dem_thoi_gian = 0;
+            giam_cong_nguoi_choi = false;
+            giam_cong_may = false;
+        }
+
+        static Random random = new Random();
+        static Random rd = new Random();
         static List<int> NgauNhien(int minValue, int maxValue)
         {
             List<int> numbers = new List<int>();
-            Random random = new Random();
 
             for (int i = minValue; i < maxValue; i++)
             {
@@ -98,6 +113,7 @@ namespace WaifuCardsBattle
 
             return numbers;
         }
+
 
         static TheWaifu Itsuka_Kotori = new TheWaifu(100, 10, 1, "Itsuka Kotori", 1, "Pháo Hỏa Ngục", "Pháo Hỏa Ngục: Bắn một tia lửa có nhiệt lượng cực cao vào đối thủ gây 500% sát thương so với sức tấn công hiện tại.");
 
@@ -131,6 +147,7 @@ namespace WaifuCardsBattle
 
         static TheWaifu Nguoi = new TheWaifu();
         static TheWaifu AI = new TheWaifu();
+        static int so_luong_waifu = 2;
 
         static TheKyNang KyNangTanCong = new TheKyNang(1, "Tấn Công", "Thẻ Tấn Công: Tấn công với sức tấn công bằng chỉ số công hiện tại.");
         static public int TanCong(int cong, int thu, int mau)
@@ -141,7 +158,7 @@ namespace WaifuCardsBattle
                 return mau - (cong - thu);
         }
 
-        static TheKyNang KyNangHoiMau = new TheKyNang(2, "Hồi Máu", "Thẻ Hồi Máu: Hồi máu với 20% máu tối đa hiện tại.");
+        static TheKyNang KyNangHoiMau = new TheKyNang(2, "Hồi Máu", "Thẻ Hồi Máu: Hồi máu với 20% máu hiện tại.");
         static public int HoiMau(int mau)
         {
             if ((mau + ((mau * 20) / 100)) >= 100)
@@ -170,10 +187,19 @@ namespace WaifuCardsBattle
         static bool giam_cong_nguoi_choi = false;
         static bool giam_cong_may = false;
 
+        static TheKyNang KyNangHoiPhuc = new TheKyNang(6, "Hồi Phục", "Thẻ Hồi Phục: Hồi máu với 20% máu tối đa hiện tại.");
+        static public int HoiPhuc(int mau, int mau_toi_da)
+        {
+            if ((mau + ((mau_toi_da * 20) / 100)) >= 100)
+                return 100;
+            else
+                return mau + (mau_toi_da * 20) / 100;
+        }
+
 
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-
+        static int so_luong_ky_nang = 6;
 
 
         static void Main(string[] args)
@@ -262,6 +288,9 @@ namespace WaifuCardsBattle
         }
 
 
+        static int nguoi_mau_toi_da;
+        static int may_mau_toi_da;
+        static bool kiem_tra_ky_nangAI = true;
         static int luu_id_nguoi;
         static void Choi()
         {
@@ -270,8 +299,7 @@ namespace WaifuCardsBattle
             int x = 25, y = 17;
             int x_tam, y_tam;
             bool kiem_tra_ky_nang = true;
-
-            Random rd = new Random();
+           
             int gia_tri_luot_di = rd.Next(1, 3);
 
             if (gia_tri_luot_di == 1)
@@ -279,7 +307,7 @@ namespace WaifuCardsBattle
             else
                 luot_di = false;
 
-            List<int> numbersNguoi = NgauNhien(1, 3);
+            List<int> numbersNguoi = NgauNhien(1, so_luong_waifu+1);
 
             int demNguoi = 0;
             foreach (int numberNguoi in numbersNguoi)
@@ -300,7 +328,7 @@ namespace WaifuCardsBattle
                     break;
             }
 
-            List<int> numbersNguoiAI = NgauNhien(1, 3);
+            List<int> numbersNguoiAI = NgauNhien(1, so_luong_waifu+1);
 
             int demNguoiAI = 0;
             foreach (int numberNguoiAI in numbersNguoiAI)
@@ -325,7 +353,7 @@ namespace WaifuCardsBattle
                
             }
 
-            List<int> numbers = NgauNhien(1, 6);
+            List<int> numbers = NgauNhien(1, so_luong_ky_nang+1);
 
             int dem = 0;
             foreach (int number in numbers)
@@ -348,6 +376,9 @@ namespace WaifuCardsBattle
                     case 5:
                         MangKyNang[dem] = KyNangGiamSucManh;
                         break;
+                    case 6:
+                        MangKyNang[dem] = KyNangHoiPhuc;
+                        break;
                 }    
                     
                 if (dem == 4)
@@ -355,7 +386,7 @@ namespace WaifuCardsBattle
             }
 
             
-            List<int> numbersAI = NgauNhien(1, 6);
+            List<int> numbersAI = NgauNhien(1, so_luong_ky_nang+1);
 
             int demAI = 0;
             foreach (int numberAI in numbersAI)
@@ -378,11 +409,17 @@ namespace WaifuCardsBattle
                     case 5:
                         MangKyNangAI[demAI] = KyNangGiamSucManh;
                         break;
+                    case 6:
+                        MangKyNangAI[demAI] = KyNangHoiPhuc;
+                        break;
                 }
 
                 if (demAI == 4)
                     break;
             }
+
+            nguoi_mau_toi_da = Nguoi.Mau;
+            may_mau_toi_da = AI.Mau;
 
             while (true)
             {
@@ -393,6 +430,9 @@ namespace WaifuCardsBattle
 
                 if (thoi_gian_may == false)
                     luot_di = true;
+                if (thoi_gian_nguoi_choi == false)
+                    luot_di = false;
+
 
                 if (luot_di == true)
                     van_dau = "Lượt của bạn!";
@@ -400,13 +440,13 @@ namespace WaifuCardsBattle
                     van_dau = "Lượt của máy!";
                     
                 Console.SetCursorPosition(25, 5);
-                Console.WriteLine("Thẻ: "+ AI.Ten +" Máu: "+ AI.Mau + " Công: "+ AI.Cong + " Thủ: "+ AI.Thu);
+                Console.WriteLine("Thẻ: "+ AI.Ten +" Máu: "+ AI.Mau +"/"+ may_mau_toi_da+" Công: "+ AI.Cong + " Thủ: "+ AI.Thu);
 
                 Console.SetCursorPosition(25, 10);
                 Console.WriteLine(van_dau);
                 
                 Console.SetCursorPosition(25, 15);
-                Console.WriteLine("Thẻ: " + Nguoi.Ten +" Máu: "+ Nguoi.Mau + " Công: "+ Nguoi.Cong + " Thủ: "+ Nguoi.Thu);
+                Console.WriteLine("Thẻ: " + Nguoi.Ten +" Máu: "+ Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: "+ Nguoi.Thu);
                 Console.SetCursorPosition(27, 17);
                 Console.WriteLine(MangKyNang[1].Ten);
                 Console.SetCursorPosition(27, 19);
@@ -542,6 +582,12 @@ namespace WaifuCardsBattle
                         van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
                         KyNang(MangKyNangAI[4].Id, luot_di);
                     }
+                    if (id == 5)
+                    {
+                        van_dau = "Máy vừa sử dụng thẻ kỹ năng tối thượng " + AI.Ky_nang_toi_thuong + "!";
+                        kiem_tra_ky_nangAI = false;
+                        KyNangToiThuong(AI.Id, luot_di);
+                    }
                     luot_di = !luot_di;
                     Console.SetCursorPosition(25, 10);
                     for (int i = 0; i < van_dau_tam.Length; i++)
@@ -562,8 +608,10 @@ namespace WaifuCardsBattle
 
         static int AILuaChon()
         {
-            Random rd = new Random();
-            return rd.Next(1,5);
+            if (kiem_tra_ky_nangAI == true)
+                return rd.Next(1, 6);
+            else
+                return rd.Next(1, 5);
         }
 
         static void ThongTin(int id)
@@ -642,6 +690,12 @@ namespace WaifuCardsBattle
                         giam_cong_nguoi_choi = true;
                     }    
                     break;
+                case 6:
+                    if (luot_di == true)
+                        Nguoi.Mau = HoiPhuc(Nguoi.Mau, nguoi_mau_toi_da);
+                    else
+                        AI.Mau = HoiPhuc(AI.Mau, may_mau_toi_da);
+                    break;
             }
         }
 
@@ -673,6 +727,12 @@ namespace WaifuCardsBattle
                     giam_cong_may = false;
                     AI.Cong *= 2;
                 }
+                if (thoi_gian_nguoi_choi == false)
+                {
+                    if (dem_thoi_gian == 0)
+                        thoi_gian_nguoi_choi = true;
+                    dem_thoi_gian--;
+                }
             }
             else
             {
@@ -697,6 +757,8 @@ namespace WaifuCardsBattle
             Console.SetCursorPosition(5, 5);
             Console.WriteLine("GAME OVER");
             Thread.Sleep(3000);
+            Reset();
+            Console.Clear();
             menu();
         }
 
@@ -704,8 +766,10 @@ namespace WaifuCardsBattle
         {
             Console.Clear();
             Console.SetCursorPosition(5, 5);
-            Console.WriteLine("CHIEN THANG");
+            Console.WriteLine("Chúc mừng bạn đã chiến thắng!");
             Thread.Sleep(3000);
+            Reset();
+            Console.Clear();
             menu();
         }
 
