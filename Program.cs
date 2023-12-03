@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WaifuCardsBattle
 {
@@ -286,10 +287,33 @@ namespace WaifuCardsBattle
         static int luu_dem_khien_bao_ve_nguoi_choi;
         static int luu_dem_khien_bao_ve_may;
 
+        static TheKyNang KyNangDaoNguoc = new TheKyNang(17, "Đảo Ngược(Bug?)", "Thẻ Đảo Ngược: Đảo ngược tác dụng của mọi kỹ năng mà đối thủ sử dụng ở lượt kế.");
+        static public void DaoNguoc()
+        {
+
+        }
+
+        static bool dao_nguoc_nguoi_choi = false;
+        static bool dao_nguoc_may = false;
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 16;
+        static int so_luong_ky_nang = 17;
 
+        static int nguoi_mau_toi_da;
+        static int may_mau_toi_da;
+        static bool kiem_tra_ky_nangAI = true;
+        static int luu_id_nguoi;
+
+        static TheKyNang[] LuuKyNang = new TheKyNang[100];
+        static TheKyNang[] LuuKyNangAI = new TheKyNang[100];
+
+        static TheKyNang[] DaDungKyNang = new TheKyNang[100];
+        static TheKyNang[] DaDungKyNangAI = new TheKyNang[100];
+
+        static int sat_thuong_nguoi_choi;
+        static int sat_thuong_may;
+        static bool luot_di_tam = false;
 
         static void Main(string[] args)
         {
@@ -375,20 +399,6 @@ namespace WaifuCardsBattle
         {
             Environment.Exit(0);
         }
-
-
-        static int nguoi_mau_toi_da;
-        static int may_mau_toi_da;
-        static bool kiem_tra_ky_nangAI = true;
-        static int luu_id_nguoi;
-
-        static TheKyNang[] LuuKyNang = new TheKyNang[100];
-        static TheKyNang[] LuuKyNangAI = new TheKyNang[100];
-
-        static TheKyNang[] DaDungKyNang = new TheKyNang[100];
-        static TheKyNang[] DaDungKyNangAI = new TheKyNang[100];
-        static int sat_thuong_nguoi_choi;
-        static int sat_thuong_may;
 
         static void Choi()
         {
@@ -555,6 +565,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangKhienBaoVe;
                         break;
+                    case 17:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangDaoNguoc;
+                        else
+                            LuuKyNang[dem - 4] = KyNangDaoNguoc;
+                        break;
                 }
             }
 
@@ -663,6 +679,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangKhienBaoVe;
                         break;
+                    case 17:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangDaoNguoc;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangDaoNguoc;
+                        break;
                 }
             }
 
@@ -673,12 +695,20 @@ namespace WaifuCardsBattle
             /*
             for(int test = 1; test <= 4; test++)
             {
-                MangKyNang[test] = KyNangKhienBaoVe;
-                MangKyNangAI[test] = KyNangKhienBaoVe;
+                MangKyNang[test] = KyNangDaoNguoc;
+                MangKyNangAI[test] = KyNangDaoNguoc;
             }
-            */
             
-
+            MangKyNang[1] = KyNangDaoNguoc;
+            MangKyNangAI[1] = KyNangDaoNguoc;
+            MangKyNang[2] = KyNangTanCong;
+            MangKyNangAI[2] = KyNangTanCong;
+            MangKyNang[3] = KyNangKhienBaoVe;
+            MangKyNangAI[3] = KyNangKhienBaoVe;
+            MangKyNang[4] = KyNangTanCongPhucHoi;
+            MangKyNangAI[4] = KyNangTanCongPhucHoi;
+            */
+            // Debug Code
 
             int luu_vi_tri = 0;
             int kiem_tra_thu_tu = 0;
@@ -741,14 +771,9 @@ namespace WaifuCardsBattle
                     }    
                 }
                 
-                if (Nguoi.Mau <= 0)
-                    GameOver();
-                if (AI.Mau <= 0)
-                    ChienThang();
-
-                if (thoi_gian_may == false)
+                if (thoi_gian_may == false) // Điều chỉnh thời gian
                     luot_di = true;
-                if (thoi_gian_nguoi_choi == false)
+                if (thoi_gian_nguoi_choi == false) // Điều chỉnh thời gian
                     luot_di = false;
 
 
@@ -756,14 +781,25 @@ namespace WaifuCardsBattle
                     van_dau = "Lượt của bạn!";
                 else
                     van_dau = "Lượt của máy!";
-                    
+
+                if (Nguoi.Mau <= 0)
+                    van_dau = "Bạn đã thua:<";
+
+                if (AI.Mau <= 0)
+                    van_dau = "Bạn đã chiến thắng!";
+
+
                 Console.SetCursorPosition(25, 5);
+                if (kiem_tra_ky_nangAI == true)
+                    Console.Write("*");
                 Console.WriteLine("Thẻ: "+ AI.Ten +" Máu: "+ AI.Mau +"/"+ may_mau_toi_da+" Công: "+ AI.Cong + " Thủ: "+ AI.Thu);
 
                 Console.SetCursorPosition(25, 10);
                 Console.WriteLine(van_dau);
                 
                 Console.SetCursorPosition(25, 15);
+                if (kiem_tra_ky_nang == true)
+                    Console.Write("*");
                 Console.WriteLine("Thẻ: " + Nguoi.Ten +" Máu: "+ Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: "+ Nguoi.Thu);
                 Console.SetCursorPosition(27, 17);
                 Console.WriteLine(MangKyNang[1].Ten);
@@ -789,161 +825,192 @@ namespace WaifuCardsBattle
                 y_tam = y;
 
                 string van_dau_tam = van_dau;
-
-                if (luot_di == true)
+                if (Nguoi.Mau > 0 && AI.Mau > 0)
                 {
-                    ConsoleKeyInfo lua_chon = Console.ReadKey();
-                    switch (lua_chon.Key)
+                    if (luot_di == true)
                     {
-                        case ConsoleKey.W:
-                            if (y >= 19)
-                                y -= 2;
-                            break;
+                        ConsoleKeyInfo lua_chon = Console.ReadKey();
 
-                        case ConsoleKey.S:
-                            int vi_tri_y = 21;
-                            if (kiem_tra_ky_nang == true)
-                                vi_tri_y = 23;
-                            if (y <= vi_tri_y)
-                                y += 2;
-                            break;
+                        luot_di_tam = luot_di;
+                        if (dao_nguoc_nguoi_choi == true) // Đảo ngược
+                            luot_di_tam = !luot_di_tam;
 
-                        case ConsoleKey.P:
-                            Console.Clear();
-                            if (y == 17)
-                                ThongTin(1);
-                            if (y == 19)
-                                ThongTin(2);
-                            if (y == 21)
-                                ThongTin(3);
-                            if (y == 23)
-                                ThongTin(4);
-                            if (kiem_tra_ky_nang == true)
-                            {
+                        switch (lua_chon.Key)
+                        {
+                            case ConsoleKey.W:
+                                if (y >= 19)
+                                    y -= 2;
+                                break;
+
+                            case ConsoleKey.S:
+                                int vi_tri_y = 21;
+                                if (kiem_tra_ky_nang == true)
+                                    vi_tri_y = 23;
+                                if (y <= vi_tri_y)
+                                    y += 2;
+                                break;
+
+                            case ConsoleKey.P:
+                                Console.Clear();
+                                if (y == 17)
+                                    ThongTin(1);
+                                if (y == 19)
+                                    ThongTin(2);
+                                if (y == 21)
+                                    ThongTin(3);
+                                if (y == 23)
+                                    ThongTin(4);
+                                if (kiem_tra_ky_nang == true)
+                                {
+                                    if (y == 25)
+                                        ThongTin(5);
+                                }
+
+                                Console.Clear();
+                                break;
+
+                            case ConsoleKey.K:
+                                if (y == 17)
+                                {
+                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[1].Ten + "!";
+                                    KyNang(MangKyNang[1].Id, luot_di_tam);
+                                    luu_vi_tri = 1;
+                                    kiem_tra_hanh_dong = true;
+                                }
+
+                                if (y == 19)
+                                {
+                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[2].Ten + "!";
+                                    KyNang(MangKyNang[2].Id, luot_di_tam);
+                                    luu_vi_tri = 2;
+                                    kiem_tra_hanh_dong = true;
+                                }
+
+                                if (y == 21)
+                                {
+                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[3].Ten + "!";
+                                    KyNang(MangKyNang[3].Id, luot_di_tam);
+                                    luu_vi_tri = 3;
+                                    kiem_tra_hanh_dong = true;
+                                }
+
+                                if (y == 23)
+                                {
+                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[4].Ten + "!";
+                                    KyNang(MangKyNang[4].Id, luot_di_tam);
+                                    luu_vi_tri = 4;
+                                    kiem_tra_hanh_dong = true;
+                                }
                                 if (y == 25)
-                                    ThongTin(5);
-                            }    
-                            
-                            Console.Clear();
-                            break;
+                                {
+                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng tối thượng " + Nguoi.Ky_nang_toi_thuong + "!";
+                                    kiem_tra_ky_nang = false;
+                                    y = 17;
+                                    KyNangToiThuong(Nguoi.Id, luot_di_tam);
+                                }
 
-                        case ConsoleKey.K:
-                            if (y == 17)
-                            {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[1].Ten+ "!";
-                                KyNang(MangKyNang[1].Id, luot_di);
-                                luu_vi_tri = 1;
-                                kiem_tra_hanh_dong = true;
-                            }
+                                if (khien_bao_ve_may == true) // Khiên bảo vệ
+                                    sat_thuong_nguoi_choi = 0;
 
-                            if (y == 19)
-                            {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[2].Ten + "!";
-                                KyNang(MangKyNang[2].Id, luot_di);
-                                luu_vi_tri = 2;
-                                kiem_tra_hanh_dong = true;
-                            }
+                                if (luot_di_tam == true) // Đảo ngược
+                                    AI.Mau -= sat_thuong_nguoi_choi;
+                                else
+                                    Nguoi.Mau -= sat_thuong_may;
 
-                            if (y == 21)
-                            {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[3].Ten + "!";
-                                KyNang(MangKyNang[3].Id, luot_di);
-                                luu_vi_tri = 3;
-                                kiem_tra_hanh_dong = true;
-                            }
+                                luot_di = !luot_di;
+                                Console.SetCursorPosition(25, 10);
+                                for (int i = 0; i < van_dau_tam.Length; i++)
+                                    Console.WriteLine(" ");
+                                Console.SetCursorPosition(25, 10);
+                                Console.WriteLine(van_dau);
+                                Thread.Sleep(1000);
 
-                            if (y == 23)
-                            {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng "+ MangKyNang[4].Ten + "!";
-                                KyNang(MangKyNang[4].Id, luot_di);
-                                luu_vi_tri = 4;
-                                kiem_tra_hanh_dong = true;
-                            }
-                            if (y == 25)
-                            {
-                                van_dau = "Bạn vừa sử dụng thẻ kỹ năng tối thượng " + Nguoi.Ky_nang_toi_thuong + "!";
-                                kiem_tra_ky_nang = false;
-                                y = 17;
-                                KyNangToiThuong(Nguoi.Id, luot_di);
-                            }
-                            if (khien_bao_ve_may == true)
-                                sat_thuong_nguoi_choi = 0;
-                            AI.Mau -= sat_thuong_nguoi_choi;
-                            luot_di = !luot_di;
-                            Console.SetCursorPosition(25, 10);
-                            for (int i = 0; i < van_dau_tam.Length; i++)
-                                Console.WriteLine(" ");
-                            Console.SetCursorPosition(25, 10);
-                            Console.WriteLine(van_dau);                            
-                            Thread.Sleep(1000);
-                            HieuUng(luot_di);
-                            Console.Clear();
-                            break;
+                                HieuUng(luot_di);
+                                Console.Clear();
+                                break;
 
-                        case ConsoleKey.Q:
-                            return;
+                            case ConsoleKey.Q:
+                                return;
+                        }
                     }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                        int id = AILuaChon();
+
+                        luot_di_tam = luot_di;
+                        if (dao_nguoc_may == true) // Đảo ngược
+                            luot_di_tam = !luot_di_tam;
+
+                        if (id == 1)
+                        {
+                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
+                            KyNang(MangKyNangAI[1].Id, luot_di_tam);
+                            luu_vi_triAI = 1;
+                            kiem_tra_hanh_dongAI = true;
+                        }
+
+                        if (id == 2)
+                        {
+                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
+                            KyNang(MangKyNangAI[2].Id, luot_di_tam);
+                            luu_vi_triAI = 2;
+                            kiem_tra_hanh_dongAI = true;
+                        }
+
+                        if (id == 3)
+                        {
+                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
+                            KyNang(MangKyNangAI[3].Id, luot_di_tam);
+                            luu_vi_triAI = 3;
+                            kiem_tra_hanh_dongAI = true;
+                        }
+
+                        if (id == 4)
+                        {
+                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
+                            KyNang(MangKyNangAI[4].Id, luot_di_tam);
+                            luu_vi_triAI = 4;
+                            kiem_tra_hanh_dongAI = true;
+                        }
+                        if (id == 5)
+                        {
+                            van_dau = "Máy vừa sử dụng thẻ kỹ năng tối thượng " + AI.Ky_nang_toi_thuong + "!";
+                            kiem_tra_ky_nangAI = false;
+                            KyNangToiThuong(AI.Id, luot_di_tam);
+                        }
+
+                        if (khien_bao_ve_nguoi_choi == true) // Khiên bảo vệ
+                            sat_thuong_may = 0;
+
+                        if (luot_di_tam == true) // Đảo ngược
+                            AI.Mau -= sat_thuong_nguoi_choi;
+                        else
+                            Nguoi.Mau -= sat_thuong_may;
+
+                        luot_di = !luot_di;
+                        Console.SetCursorPosition(25, 10);
+                        for (int i = 0; i < van_dau_tam.Length; i++)
+                            Console.WriteLine(" ");
+                        Console.SetCursorPosition(25, 10);
+                        Console.WriteLine(van_dau);
+                        Thread.Sleep(1000);
+
+                        HieuUng(luot_di);
+                        Console.Clear();
+                    }
+
+                    Console.SetCursorPosition(x_tam, y_tam);
+                    Console.Write("  ");
+
                 }
                 else
                 {
-                    Thread.Sleep(1000);
-                    int id = AILuaChon();
-                    if (id == 1)
-                    {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
-                        KyNang(MangKyNangAI[1].Id, luot_di);
-                        luu_vi_triAI = 1;
-                        kiem_tra_hanh_dongAI = true;
-                    }
-
-                    if (id == 2)
-                    {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
-                        KyNang(MangKyNangAI[2].Id, luot_di);
-                        luu_vi_triAI = 2;
-                        kiem_tra_hanh_dongAI = true;
-                    }
-
-                    if (id == 3)
-                    {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
-                        KyNang(MangKyNangAI[3].Id, luot_di);
-                        luu_vi_triAI = 3;
-                        kiem_tra_hanh_dongAI = true;
-                    }
-
-                    if (id == 4)
-                    {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
-                        KyNang(MangKyNangAI[4].Id, luot_di);
-                        luu_vi_triAI = 4;
-                        kiem_tra_hanh_dongAI = true;
-                    }
-                    if (id == 5)
-                    {
-                        van_dau = "Máy vừa sử dụng thẻ kỹ năng tối thượng " + AI.Ky_nang_toi_thuong + "!";
-                        kiem_tra_ky_nangAI = false;
-                        KyNangToiThuong(AI.Id, luot_di);
-                    }
-                    if (khien_bao_ve_nguoi_choi == true)
-                        sat_thuong_may = 0;
-                    Nguoi.Mau -= sat_thuong_may;
-                    luot_di = !luot_di;
-                    Console.SetCursorPosition(25, 10);
-                    for (int i = 0; i < van_dau_tam.Length; i++)
-                        Console.WriteLine(" ");
-                    Console.SetCursorPosition(25, 10);
-                    Console.WriteLine(van_dau);                  
-                    Thread.Sleep(1000);
-                    HieuUng(luot_di);
-                    Console.Clear();
+                    Console.ReadKey();
+                    Thoat();
                 }
-                    
-                Console.SetCursorPosition(x_tam, y_tam);
-                Console.Write("  ");
-
             }
-
+           
         }
 
         static int AILuaChon()
@@ -1141,19 +1208,25 @@ namespace WaifuCardsBattle
                     {
                         int mau_truoc_khi_danh = AI.Mau;
                         sat_thuong_nguoi_choi = TanCongPhucHoi(Nguoi.Cong, AI.Thu);
-                        Nguoi.Mau += mau_truoc_khi_danh - (AI.Mau - sat_thuong_nguoi_choi);
-                        if(Nguoi.Mau >= nguoi_mau_toi_da)
-                            Nguoi.Mau = nguoi_mau_toi_da;
+                        if (khien_bao_ve_may == false)
+                        {
+                            Nguoi.Mau += mau_truoc_khi_danh - (AI.Mau - sat_thuong_nguoi_choi);
+                            if (Nguoi.Mau >= nguoi_mau_toi_da)
+                                Nguoi.Mau = nguoi_mau_toi_da;
+                        }      
                     }
                     else
                     {
                         int mau_truoc_khi_danh = Nguoi.Mau;
                         sat_thuong_may = TanCongPhucHoi(AI.Cong, Nguoi.Thu);
-                        AI.Mau += mau_truoc_khi_danh - (Nguoi.Mau - sat_thuong_may);
-                        if (AI.Mau >= may_mau_toi_da)
-                            AI.Mau = may_mau_toi_da;
-                    }
-
+                        if (khien_bao_ve_nguoi_choi == false)
+                        {
+                            AI.Mau += mau_truoc_khi_danh - (Nguoi.Mau - sat_thuong_may);
+                            if (AI.Mau >= may_mau_toi_da)
+                                AI.Mau = may_mau_toi_da;
+                        }
+                    }    
+                       
                     break;
                 case 16:
                     if (luot_di == true)
@@ -1167,6 +1240,19 @@ namespace WaifuCardsBattle
                         KhienBaoVe();
                         khien_bao_ve_may = true;
                         luu_dem_khien_bao_ve_may = 2;
+                    }
+
+                    break;
+                case 17:
+                    if (luot_di == true)
+                    {
+                        DaoNguoc();
+                        dao_nguoc_may = true;                       
+                    }
+                    else
+                    {
+                        DaoNguoc();
+                        dao_nguoc_nguoi_choi = true;
                     }
 
                     break;
@@ -1260,6 +1346,9 @@ namespace WaifuCardsBattle
                     else
                         luu_dem_khien_bao_ve_may--;
                 }
+
+                if (dao_nguoc_may == true) // 1 lượt thì bình thường                
+                    dao_nguoc_may = false;                  
             }
             else // Máy
             {
@@ -1328,26 +1417,11 @@ namespace WaifuCardsBattle
                         luu_dem_khien_bao_ve_nguoi_choi--;
                 }
 
+                if (dao_nguoc_nguoi_choi == true) // 1 lượt thì bình thường                
+                    dao_nguoc_nguoi_choi = false;
+
             }
             
-        }
-
-        static void GameOver()
-        {
-            Console.Clear();
-            Console.SetCursorPosition(5, 5);
-            Console.WriteLine("GAME OVER");
-            Console.ReadKey();
-            Thoat();
-        }
-
-        static void ChienThang()
-        {
-            Console.Clear();
-            Console.SetCursorPosition(5, 5);
-            Console.WriteLine("Chúc mừng bạn đã chiến thắng!");
-            Console.ReadKey();
-            Thoat();
         }
 
     }
