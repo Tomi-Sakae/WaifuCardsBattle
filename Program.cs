@@ -9,7 +9,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace WaifuCardsBattle
 {
-    // Waifu Cards Battle Code viết bởi Tomi Sakae (https://github.com/Tomi-Sakae/WaifuCardsBattle)
+    // Waifu Cards Battle Code viết bởi Tomi Sakae (https://github.com/Tomi-Sakae/WaifuCardsBattle).
     public class TheWaifu
     {
         private int mau;
