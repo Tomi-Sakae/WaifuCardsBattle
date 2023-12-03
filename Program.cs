@@ -841,7 +841,7 @@ namespace WaifuCardsBattle
                 if (luot_di == true)
                     van_dau = "Lượt của bạn!";
                 else
-                    van_dau = "Lượt của máy!";
+                    van_dau = "Lượt của đối thủ!";
 
                 if (Nguoi.Mau <= 0)
                     van_dau = "Bạn đã thua:<";
@@ -945,7 +945,7 @@ namespace WaifuCardsBattle
                             case ConsoleKey.K:
                                 if (y == 21)
                                 {
-                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[1].Ten + "!";
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[1].Ten + "!";
                                     KyNang(MangKyNang[1].Id, luot_di_tam);
                                     luu_vi_tri = 1;
                                     kiem_tra_hanh_dong = true;
@@ -953,7 +953,7 @@ namespace WaifuCardsBattle
 
                                 if (y == 23)
                                 {
-                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[2].Ten + "!";
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[2].Ten + "!";
                                     KyNang(MangKyNang[2].Id, luot_di_tam);
                                     luu_vi_tri = 2;
                                     kiem_tra_hanh_dong = true;
@@ -961,7 +961,7 @@ namespace WaifuCardsBattle
 
                                 if (y == 25)
                                 {
-                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[3].Ten + "!";
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[3].Ten + "!";
                                     KyNang(MangKyNang[3].Id, luot_di_tam);
                                     luu_vi_tri = 3;
                                     kiem_tra_hanh_dong = true;
@@ -969,14 +969,14 @@ namespace WaifuCardsBattle
 
                                 if (y == 27)
                                 {
-                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng " + MangKyNang[4].Ten + "!";
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[4].Ten + "!";
                                     KyNang(MangKyNang[4].Id, luot_di_tam);
                                     luu_vi_tri = 4;
                                     kiem_tra_hanh_dong = true;
                                 }
                                 if (y == 29)
                                 {
-                                    van_dau = "Bạn vừa sử dụng thẻ kỹ năng tối thượng " + Nguoi.Ky_nang_toi_thuong + "!";
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng tối thượng " + Nguoi.Ky_nang_toi_thuong + "!";
                                     kiem_tra_ky_nang = false;
                                     y = 21;
                                     KyNangToiThuong(Nguoi.Id, luot_di_tam);
@@ -1017,7 +1017,7 @@ namespace WaifuCardsBattle
 
                         if (id == 1)
                         {
-                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
+                            van_dau = AI.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNangAI[1].Ten + "!";
                             KyNang(MangKyNangAI[1].Id, luot_di_tam);
                             luu_vi_triAI = 1;
                             kiem_tra_hanh_dongAI = true;
@@ -1025,7 +1025,7 @@ namespace WaifuCardsBattle
 
                         if (id == 2)
                         {
-                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
+                            van_dau = AI.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNangAI[2].Ten + "!";
                             KyNang(MangKyNangAI[2].Id, luot_di_tam);
                             luu_vi_triAI = 2;
                             kiem_tra_hanh_dongAI = true;
@@ -1033,7 +1033,7 @@ namespace WaifuCardsBattle
 
                         if (id == 3)
                         {
-                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
+                            van_dau = AI.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNangAI[3].Ten + "!";
                             KyNang(MangKyNangAI[3].Id, luot_di_tam);
                             luu_vi_triAI = 3;
                             kiem_tra_hanh_dongAI = true;
@@ -1041,14 +1041,14 @@ namespace WaifuCardsBattle
 
                         if (id == 4)
                         {
-                            van_dau = "Máy vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
+                            van_dau = AI.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNangAI[4].Ten + "!";
                             KyNang(MangKyNangAI[4].Id, luot_di_tam);
                             luu_vi_triAI = 4;
                             kiem_tra_hanh_dongAI = true;
                         }
                         if (id == 5)
                         {
-                            van_dau = "Máy vừa sử dụng thẻ kỹ năng tối thượng " + AI.Ky_nang_toi_thuong + "!";
+                            van_dau = AI.Ten + " vừa sử dụng thẻ kỹ năng tối thượng " + AI.Ky_nang_toi_thuong + "!";
                             kiem_tra_ky_nangAI = false;
                             KyNangToiThuong(AI.Id, luot_di_tam);
                         }
@@ -1363,15 +1363,20 @@ namespace WaifuCardsBattle
                     if (luot_di == true)
                     {
                         BomHenGio();
-                        Console.SetCursorPosition(25, 11);
-                        string luu_chuoi_ky_nang = "Thẻ Bom Hẹn Giờ - Vui lòng nhập số lượt để bom phát nổ: ";
-                        Console.Write(luu_chuoi_ky_nang);
-                        string thoi_luong = Console.ReadLine();
+                        string thoi_luong;
+                        string luu_chuoi_ky_nang;
+                        do
+                        {
+                            Console.SetCursorPosition(25, 11);
+                            luu_chuoi_ky_nang = "Thẻ Bom Hẹn Giờ - Vui lòng nhập số lượt để bom phát nổ: ";
+                            Console.Write(luu_chuoi_ky_nang);
+                            thoi_luong = Console.ReadLine();
+                            Console.SetCursorPosition(25, 11);
+                            for (int i = 0; i < luu_chuoi_ky_nang.Length + 10; i++)
+                                Console.Write(" ");
+                        } while (int.Parse(thoi_luong) < 1);                        
                         luot_cho_bom_hen_gio_may = int.Parse(thoi_luong); // ép kiểu
-                        kiem_tra_bom_hen_gio_may = true;
-                        Console.SetCursorPosition(25, 11);
-                        for(int i = 0; i < luu_chuoi_ky_nang.Length+10; i++)
-                            Console.Write(" ");
+                        kiem_tra_bom_hen_gio_may = true;                     
                     }
                     else
                     {
