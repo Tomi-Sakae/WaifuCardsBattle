@@ -776,8 +776,8 @@ namespace WaifuCardsBattle
             MangKyNangAI[2] = KyNangTanCong;
             MangKyNang[3] = KyNangBomHenGio;
             MangKyNangAI[3] = KyNangBomHenGio;
-            MangKyNang[4] = KyNangSongAnhChiSo;
-            MangKyNangAI[4] = KyNangSongAnhChiSo;
+            MangKyNang[4] = KyNangDaoNguoc;
+            MangKyNangAI[4] = KyNangDaoNguoc;
             */
             // Debug Code
 
@@ -1526,12 +1526,12 @@ namespace WaifuCardsBattle
                     else
                     {
                         BomHenGio();
-                        if (choi_co_op == false)
+                        if (choi_co_op == false && dao_nguoc_nguoi_choi == false)
                         {
                             luot_cho_bom_hen_gio_nguoi_choi = rd.Next(1, 6);
                             kiem_tra_bom_hen_gio_nguoi_choi = true;
                         }    
-                        else
+                        else if(choi_co_op == true || dao_nguoc_nguoi_choi == true)
                         {
                             string thoi_luong;
                             string luu_chuoi_ky_nang;
