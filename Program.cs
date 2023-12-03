@@ -296,9 +296,17 @@ namespace WaifuCardsBattle
         static bool dao_nguoc_nguoi_choi = false;
         static bool dao_nguoc_may = false;
 
+        static TheKyNang KyNangHienThucHoa = new TheKyNang(18, "Hiện Thực Hóa", "Thẻ Hiện Thực Hóa: Hiện thực hóa tất cả các trạng thái ảo hiện tại của cả ván đấu.");
+        static public void HienThucHoa()
+        {
+
+        }
+
+        static bool hien_thuc_hoa = false;
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 17;
+        static int so_luong_ky_nang = 18;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -571,6 +579,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangDaoNguoc;
                         break;
+                    case 18:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangHienThucHoa;
+                        else
+                            LuuKyNang[dem - 4] = KyNangHienThucHoa;
+                        break;
                 }
             }
 
@@ -685,6 +699,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangDaoNguoc;
                         break;
+                    case 18:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangHienThucHoa;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangHienThucHoa;
+                        break;
                 }
             }
 
@@ -698,16 +718,16 @@ namespace WaifuCardsBattle
                 MangKyNang[test] = KyNangDaoNguoc;
                 MangKyNangAI[test] = KyNangDaoNguoc;
             }
-            
-            MangKyNang[1] = KyNangDaoNguoc;
-            MangKyNangAI[1] = KyNangDaoNguoc;
+            */
+            MangKyNang[1] = KyNangHienThucHoa;
+            MangKyNangAI[1] = KyNangHienThucHoa;
             MangKyNang[2] = KyNangTanCong;
             MangKyNangAI[2] = KyNangTanCong;
-            MangKyNang[3] = KyNangKhienBaoVe;
-            MangKyNangAI[3] = KyNangKhienBaoVe;
-            MangKyNang[4] = KyNangTanCongPhucHoi;
-            MangKyNangAI[4] = KyNangTanCongPhucHoi;
-            */
+            MangKyNang[3] = KyNangMauAo;
+            MangKyNangAI[3] = KyNangMauAo;
+            MangKyNang[4] = KyNangSieuTangCuong;
+            MangKyNangAI[4] = KyNangSieuTangCuong;
+            
             // Debug Code
 
             int luu_vi_tri = 0;
@@ -1256,6 +1276,19 @@ namespace WaifuCardsBattle
                     }
 
                     break;
+                case 18:
+                    if (luot_di == true)
+                    {
+                        HienThucHoa();
+                        hien_thuc_hoa = true;
+                    }
+                    else
+                    {
+                        HienThucHoa();
+                        hien_thuc_hoa = true;
+                    }
+
+                    break;
             }
         }
 
@@ -1280,147 +1313,164 @@ namespace WaifuCardsBattle
 
         static void HieuUng(bool kiem_tra)
         {
-            if (kiem_tra == true) // Người
+            if (hien_thuc_hoa == false)
             {
-                if (giam_cong_may == true) // 1 lượt thì bình thường
+                if (kiem_tra == true) // Người
                 {
-                    giam_cong_may = false;
-                    AI.Cong *= 2;
-                }
-
-                if (thoi_gian_nguoi_choi == false)
-                {
-                    if (dem_thoi_gian == 0)
-                        thoi_gian_nguoi_choi = true;
-                    dem_thoi_gian--;
-                }
-
-                if (giam_thu_nguoi_choi == true) // 2 lượt thì đảo lại hiệu ứng của máy để bên người và hiệu ứng người để bên máy
-                {
-                    if (luu_dem_pha_giap_nguoi_choi == 1)
+                    if (giam_cong_may == true) // 1 lượt thì bình thường
                     {
-                        giam_thu_nguoi_choi = false;
-                        Nguoi.Thu = luu_thu_nguoi_choi;
+                        giam_cong_may = false;
+                        AI.Cong *= 2;
                     }
-                    else
-                        luu_dem_pha_giap_nguoi_choi--;
-                }
 
-                if (tang_cong_may == true) // 2 lượt
-                {
-                    if (luu_dem_sieu_tang_cuong_may == 1)
+                    if (thoi_gian_nguoi_choi == false)
                     {
-                        tang_cong_may = false;
-                        AI.Cong = luu_cong_may;
+                        if (dem_thoi_gian == 0)
+                            thoi_gian_nguoi_choi = true;
+                        dem_thoi_gian--;
                     }
-                    else
-                        luu_dem_sieu_tang_cuong_may--;
-                }
 
-                if (tang_giap_may == true) // 2 lượt
-                {
-                    if (luu_dem_giap_ao_may == 1)
+                    if (giam_thu_nguoi_choi == true) // 2 lượt thì đảo lại hiệu ứng của máy để bên người và hiệu ứng người để bên máy
                     {
-                        tang_giap_may = false;
-                        AI.Thu = luu_giap_may;
+                        if (luu_dem_pha_giap_nguoi_choi == 1)
+                        {
+                            giam_thu_nguoi_choi = false;
+                            Nguoi.Thu = luu_thu_nguoi_choi;
+                        }
+                        else
+                            luu_dem_pha_giap_nguoi_choi--;
                     }
-                    else
-                        luu_dem_giap_ao_may--;
-                }
 
-                if (tang_mau_ao_may == true) // 2 lượt
-                {
-                    if (luu_dem_mau_ao_may == 1)
+                    if (tang_cong_may == true) // 2 lượt
                     {
-                        tang_mau_ao_may = false;
-                        AI.Mau = luu_mau_ao_may;
+                        if (luu_dem_sieu_tang_cuong_may == 1)
+                        {
+                            tang_cong_may = false;
+                            AI.Cong = luu_cong_may;
+                        }
+                        else
+                            luu_dem_sieu_tang_cuong_may--;
                     }
-                    else
-                        luu_dem_mau_ao_may--;
-                }
 
-                if (khien_bao_ve_may == true) // 2 lượt
+                    if (tang_giap_may == true) // 2 lượt
+                    {
+                        if (luu_dem_giap_ao_may == 1)
+                        {
+                            tang_giap_may = false;
+                            AI.Thu = luu_giap_may;
+                        }
+                        else
+                            luu_dem_giap_ao_may--;
+                    }
+
+                    if (tang_mau_ao_may == true) // 2 lượt
+                    {
+                        if (luu_dem_mau_ao_may == 1)
+                        {
+                            tang_mau_ao_may = false;
+                            AI.Mau = luu_mau_ao_may;
+                        }
+                        else
+                            luu_dem_mau_ao_may--;
+                    }
+
+                    if (khien_bao_ve_may == true) // 2 lượt
+                    {
+                        if (luu_dem_khien_bao_ve_may == 1)
+                            khien_bao_ve_may = false;
+                        else
+                            luu_dem_khien_bao_ve_may--;
+                    }
+
+                    if (dao_nguoc_may == true) // 1 lượt thì bình thường                
+                        dao_nguoc_may = false;
+                }
+                else // Máy
                 {
-                    if (luu_dem_khien_bao_ve_may == 1)
-                        khien_bao_ve_may = false;
-                    else
-                        luu_dem_khien_bao_ve_may--;
-                }
+                    if (giam_cong_nguoi_choi == true) // 1 lượt
+                    {
+                        giam_cong_nguoi_choi = false;
+                        Nguoi.Cong *= 2;
+                    }
 
-                if (dao_nguoc_may == true) // 1 lượt thì bình thường                
-                    dao_nguoc_may = false;                  
-            }
-            else // Máy
+                    if (thoi_gian_may == false)
+                    {
+                        if (dem_thoi_gian == 0)
+                            thoi_gian_may = true;
+                        dem_thoi_gian--;
+                    }
+
+                    if (giam_thu_may == true) // 2 lượt
+                    {
+                        if (luu_dem_pha_giap_may == 1)
+                        {
+                            giam_thu_may = false;
+                            AI.Thu = luu_thu_may;
+                        }
+                        else
+                            luu_dem_pha_giap_may--;
+                    }
+
+                    if (tang_cong_nguoi_choi == true) // 2 lượt
+                    {
+                        if (luu_dem_sieu_tang_cuong_nguoi_choi == 1)
+                        {
+                            tang_cong_nguoi_choi = false;
+                            Nguoi.Cong = luu_cong_nguoi_choi;
+                        }
+                        else
+                            luu_dem_sieu_tang_cuong_nguoi_choi--;
+                    }
+
+                    if (tang_giap_nguoi_choi == true) // 2 lượt
+                    {
+                        if (luu_dem_giap_ao_nguoi_choi == 1)
+                        {
+                            tang_giap_nguoi_choi = false;
+                            Nguoi.Thu = luu_giap_nguoi_choi;
+                        }
+                        else
+                            luu_dem_giap_ao_nguoi_choi--;
+                    }
+
+                    if (tang_mau_ao_nguoi_choi == true) // 2 lượt
+                    {
+                        if (luu_dem_mau_ao_nguoi_choi == 1)
+                        {
+                            tang_mau_ao_nguoi_choi = false;
+                            Nguoi.Mau = luu_mau_ao_nguoi_choi;
+                        }
+                        else
+                            luu_dem_mau_ao_nguoi_choi--;
+                    }
+
+                    if (khien_bao_ve_nguoi_choi == true) // 2 lượt
+                    {
+                        if (luu_dem_khien_bao_ve_nguoi_choi == 1)
+                            khien_bao_ve_nguoi_choi = false;
+                        else
+                            luu_dem_khien_bao_ve_nguoi_choi--;
+                    }
+
+                    if (dao_nguoc_nguoi_choi == true) // 1 lượt thì bình thường                
+                        dao_nguoc_nguoi_choi = false;
+
+                }
+            }    
+            else
             {
-                if (giam_cong_nguoi_choi == true) // 1 lượt
-                {
-                    giam_cong_nguoi_choi = false;
-                    Nguoi.Cong *= 2;
-                }
-
-                if (thoi_gian_may == false)
-                {
-                    if (dem_thoi_gian == 0)
-                        thoi_gian_may = true;
-                    dem_thoi_gian--;
-                }
-
-                if (giam_thu_may == true) // 2 lượt
-                {
-                    if (luu_dem_pha_giap_may == 1)
-                    {
-                        giam_thu_may = false;
-                        AI.Thu = luu_thu_may;
-                    }
-                    else
-                        luu_dem_pha_giap_may--;
-                }
-
-                if (tang_cong_nguoi_choi == true) // 2 lượt
-                {
-                    if (luu_dem_sieu_tang_cuong_nguoi_choi == 1)
-                    {
-                        tang_cong_nguoi_choi = false;
-                        Nguoi.Cong = luu_cong_nguoi_choi;
-                    }
-                    else
-                        luu_dem_sieu_tang_cuong_nguoi_choi--;
-                }
-
-                if (tang_giap_nguoi_choi == true) // 2 lượt
-                {
-                    if (luu_dem_giap_ao_nguoi_choi == 1)
-                    {
-                        tang_giap_nguoi_choi = false;
-                        Nguoi.Thu = luu_giap_nguoi_choi;
-                    }
-                    else
-                        luu_dem_giap_ao_nguoi_choi--;
-                }
-
-                if (tang_mau_ao_nguoi_choi == true) // 2 lượt
-                {
-                    if (luu_dem_mau_ao_nguoi_choi == 1)
-                    {
-                        tang_mau_ao_nguoi_choi = false;
-                        Nguoi.Mau = luu_mau_ao_nguoi_choi;
-                    }
-                    else
-                        luu_dem_mau_ao_nguoi_choi--;
-                }
-
-                if (khien_bao_ve_nguoi_choi == true) // 2 lượt
-                {
-                    if (luu_dem_khien_bao_ve_nguoi_choi == 1)
-                        khien_bao_ve_nguoi_choi = false;
-                    else
-                        luu_dem_khien_bao_ve_nguoi_choi--;
-                }
-
-                if (dao_nguoc_nguoi_choi == true) // 1 lượt thì bình thường                
-                    dao_nguoc_nguoi_choi = false;
-
-            }
+                hien_thuc_hoa = false;
+                giam_cong_may = false;
+                giam_cong_nguoi_choi = false;
+                giam_thu_may = false;
+                giam_thu_nguoi_choi = false;
+                tang_cong_may = false;
+                tang_cong_nguoi_choi = false;
+                tang_giap_may = false;
+                tang_giap_nguoi_choi = false;
+                tang_mau_ao_may = false;
+                tang_mau_ao_nguoi_choi = false;
+            }    
             
         }
 
