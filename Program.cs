@@ -352,9 +352,16 @@ namespace WaifuCardsBattle
         static bool ao_anh_nguoi_choi = false;
         static bool ao_anh_may = false;
 
+        static TheKyNang KyNangHoanDoiChiSo = new TheKyNang(24, "Hoán Đổi Chỉ Số", "Thẻ Hoán Đổi Chỉ Số: Làm cho tất cả chỉ số của bản thân bị hoán đổi ngẫu nhiên.");
+        static public void HoanDoiChiSo()
+        {
+
+        }
+
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 23;
+        static int so_luong_ky_nang = 24;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -673,6 +680,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangAoAnh;
                         break;
+                    case 24:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangHoanDoiChiSo;
+                        else
+                            LuuKyNang[dem - 4] = KyNangHoanDoiChiSo;
+                        break;
                 }
             }
 
@@ -823,6 +836,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangAoAnh;
                         break;
+                    case 24:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangHoanDoiChiSo;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangHoanDoiChiSo;
+                        break;
                 }
             }
 
@@ -837,12 +856,12 @@ namespace WaifuCardsBattle
                 MangKyNangAI[test] = KyNangDaoNguoc;
             }
             */
-            MangKyNang[1] = KyNangHienThucHoa;
-            MangKyNangAI[1] = KyNangHienThucHoa;
+            MangKyNang[1] = KyNangHoanDoiChiSo;
+            MangKyNangAI[1] = KyNangHoanDoiChiSo;
             MangKyNang[2] = KyNangTanCong;
             MangKyNangAI[2] = KyNangTanCong;
-            MangKyNang[3] = KyNangSuyYeu;
-            MangKyNangAI[3] = KyNangSuyYeu;
+            MangKyNang[3] = KyNangHoanDoiChiSo;
+            MangKyNangAI[3] = KyNangHoanDoiChiSo;
             MangKyNang[4] = KyNangAoAnh;
             MangKyNangAI[4] = KyNangAoAnh;
             
@@ -1705,6 +1724,66 @@ namespace WaifuCardsBattle
                     {
                         AoAnh();
                         ao_anh_nguoi_choi = true;
+                    }
+
+                    break;
+                case 24:
+                    if (luot_di == true)
+                    {
+                        HoanDoiChiSo();
+                        int[] MangChiSo = new int[100];
+                        MangChiSo[1] = Nguoi.Mau;
+                        MangChiSo[2] = Nguoi.Cong;
+                        MangChiSo[3] = Nguoi.Thu;
+
+                        List<int> chi_so = NgauNhien(1, 4);
+
+                        int dem_chi_so = 0;
+                        foreach (int chi_so_nguoi in chi_so)
+                        {
+                            dem_chi_so++;
+                            switch (chi_so_nguoi)
+                            {
+                                case 1:
+                                    Nguoi.Mau = MangChiSo[dem_chi_so];
+                                    break;
+                                case 2:
+                                    Nguoi.Cong = MangChiSo[dem_chi_so];
+                                    break;
+                                case 3:
+                                    Nguoi.Thu = MangChiSo[dem_chi_so];
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        HoanDoiChiSo();
+                        int[] MangChiSoAI = new int[100];
+                        MangChiSoAI[1] = AI.Mau;
+                        MangChiSoAI[2] = AI.Cong;
+                        MangChiSoAI[3] = AI.Thu;
+
+                        List<int> chi_so = NgauNhien(1, 4);
+
+                        int dem_chi_so = 0;
+                        foreach (int chi_so_may in chi_so)
+                        {
+                            dem_chi_so++;
+                            switch (chi_so_may)
+                            {
+                                case 1:
+                                    AI.Mau = MangChiSoAI[dem_chi_so];
+                                    break;
+                                case 2:
+                                    AI.Cong = MangChiSoAI[dem_chi_so];
+                                    break;
+                                case 3:
+                                    AI.Thu = MangChiSoAI[dem_chi_so];
+                                    break;
+                            }
+                        }
+
                     }
 
                     break;
