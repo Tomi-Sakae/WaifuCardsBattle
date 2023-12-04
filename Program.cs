@@ -392,9 +392,18 @@ namespace WaifuCardsBattle
         static int luu_dem_giap_gai_nguoi_choi;
         static int luu_dem_giap_gai_may;
 
+        static TheKyNang KyNangQuayRoi = new TheKyNang(29, "Quấy Rối", "Thẻ Quấy Rối: Làm cho đối thủ ở lượt sau không thể tự lựa chọn kỹ năng.");
+        static public void QuayRoi()
+        {
+
+        }
+
+        static bool quay_roi_nguoi_choi = false;
+        static bool quay_roi_may = false;
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 28;
+        static int so_luong_ky_nang = 29;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -743,6 +752,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangGiapGai;
                         break;
+                    case 29:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangQuayRoi;
+                        else
+                            LuuKyNang[dem - 4] = KyNangQuayRoi;
+                        break;
                 }
             }
 
@@ -923,6 +938,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangGiapGai;
                         break;
+                    case 29:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangQuayRoi;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangQuayRoi;
+                        break;
                 }
             }
 
@@ -943,8 +964,8 @@ namespace WaifuCardsBattle
             MangKyNangAI[2] = KyNangTanCong;
             MangKyNang[3] = KyNangTanCongXuyenGiap;
             MangKyNangAI[3] = KyNangTanCongXuyenGiap;
-            MangKyNang[4] = KyNangGiapGai;
-            MangKyNangAI[4] = KyNangGiapGai;
+            MangKyNang[4] = KyNangQuayRoi;
+            MangKyNangAI[4] = KyNangQuayRoi;
             
             // Debug Code
 
@@ -1112,8 +1133,29 @@ namespace WaifuCardsBattle
                 {
                     if (luot_di == true)
                     {
-                        ConsoleKeyInfo lua_chon = Console.ReadKey();
-
+                        ConsoleKeyInfo lua_chon;
+                        if (quay_roi_nguoi_choi == false) // Quấy rối
+                            lua_chon = Console.ReadKey();
+                        else
+                        {
+                            lua_chon = new ConsoleKeyInfo('K', ConsoleKey.K, false, false, false);
+                            int lua_chon_nguoi_choi;
+                            if (kiem_tra_ky_nang == true)
+                                lua_chon_nguoi_choi = rd.Next(1, 6);
+                            else
+                                lua_chon_nguoi_choi = rd.Next(1, 5);
+                            if (lua_chon_nguoi_choi == 1)
+                                y = 20;
+                            if (lua_chon_nguoi_choi == 2)
+                                y = 22;
+                            if (lua_chon_nguoi_choi == 3)
+                                y = 24;
+                            if (lua_chon_nguoi_choi == 4)
+                                y = 26;
+                            if (lua_chon_nguoi_choi == 5)
+                                y = 28;
+                        }    
+                            
                         luot_di_tam = luot_di;
                         if (dao_nguoc_nguoi_choi == true) // Đảo ngược
                             luot_di_tam = !luot_di_tam;
@@ -1217,6 +1259,9 @@ namespace WaifuCardsBattle
                                 if (ao_anh_nguoi_choi == true) // Ảo ảnh              
                                     ao_anh_nguoi_choi = false;
 
+                                if (quay_roi_nguoi_choi == true) // Quấy rối
+                                    Thread.Sleep(1000);
+
                                 luot_di = !luot_di;
                                 Console.SetCursorPosition(25, 10);
                                 for (int i = 0; i < van_dau_tam.Length; i++)
@@ -1235,13 +1280,13 @@ namespace WaifuCardsBattle
                     }
                     else
                     {                       
-                        int id;
-                        if (choi_co_op == false)
+                        int id = 0;
+                        if (choi_co_op == false || quay_roi_may == true) // Quấy rối
                         {
                             Thread.Sleep(1000);
                             id = AILuaChon();
                         }                               
-                        else
+                        else if (choi_co_op == true || quay_roi_may == false)
                             id = NguoiLuaChon(van_dau, kiem_tra_ky_nang);
 
                         luot_di_tam = luot_di;
@@ -1938,6 +1983,19 @@ namespace WaifuCardsBattle
                     }
 
                     break;
+                case 29:
+                    if (luot_di == true)
+                    {
+                        QuayRoi();
+                        quay_roi_may = true;
+                    }
+                    else
+                    {
+                        QuayRoi();
+                        quay_roi_nguoi_choi = true;
+                    }
+
+                    break;
             }
         }
 
@@ -2079,7 +2137,10 @@ namespace WaifuCardsBattle
                         }
                         else
                             luu_dem_giap_gai_may--;
-                    }    
+                    }
+
+                    if (quay_roi_may == true) // 1 lượt thì bình thường                
+                        quay_roi_may = false;
                 }
                 else // Máy
                 {
@@ -2197,6 +2258,9 @@ namespace WaifuCardsBattle
                         else
                             luu_dem_giap_gai_nguoi_choi--;
                     }
+
+                    if (quay_roi_nguoi_choi == true) // 1 lượt thì bình thường                
+                        quay_roi_nguoi_choi = false;
                 }
             }    
             else // Vô hiệu trạng thái ảo
