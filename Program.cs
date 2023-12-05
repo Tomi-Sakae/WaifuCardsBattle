@@ -410,9 +410,27 @@ namespace WaifuCardsBattle
         static bool ep_buoc_nguoi_choi = false;
         static bool ep_buoc_may = false;
 
+        static TheKyNang KyNangLoiKeoCuaTuThan = new TheKyNang(31, "Lôi Kéo Của Tử Thần", "Thẻ Lôi Kéo Của Tử Thần: Giảm 10% máu tối đa của đối thủ.");
+        static public int LoiKeoCuaTuThan(int mau_toi_da)
+        {
+            return mau_toi_da - (mau_toi_da * 10) / 100;
+        }
+
+        static TheKyNang KyNangXienGiap = new TheKyNang(32, "Xiên Giáp", "Thẻ Xiên Giáp: Giảm 1 thủ của đối thủ.");
+        static public int XienGiap(int thu)
+        {
+            return --thu;
+        }
+
+        static TheKyNang KyNangSuyGiam = new TheKyNang(33, "Suy Giảm", "Thẻ Suy Giảm: Giảm 1 công của đối thủ.");
+        static public int SuyGiam(int cong)
+        {
+            return --cong;
+        }
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 30;
+        static int so_luong_ky_nang = 33;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -773,9 +791,26 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangEpBuoc;
                         break;
+                    case 31:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangLoiKeoCuaTuThan;
+                        else
+                            LuuKyNang[dem - 4] = KyNangLoiKeoCuaTuThan;
+                        break;
+                    case 32:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangXienGiap;
+                        else
+                            LuuKyNang[dem - 4] = KyNangXienGiap;
+                        break;
+                    case 33:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangSuyGiam;
+                        else
+                            LuuKyNang[dem - 4] = KyNangSuyGiam;
+                        break;
                 }
             }
-
             
             List<int> numbersAI = NgauNhien(1, so_luong_ky_nang+1);
 
@@ -965,6 +1000,24 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangEpBuoc;
                         break;
+                    case 31:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangLoiKeoCuaTuThan;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangLoiKeoCuaTuThan;
+                        break;
+                    case 32:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangXienGiap;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangXienGiap;
+                        break;
+                    case 33:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangSuyGiam;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangSuyGiam;
+                        break;
                 }
             }
 
@@ -979,14 +1032,14 @@ namespace WaifuCardsBattle
                 MangKyNangAI[test] = KyNangDaoNguoc;
             }
             */
-            MangKyNang[1] = KyNangQuayRoi;
-            MangKyNangAI[1] = KyNangQuayRoi;
+            MangKyNang[1] = KyNangXienGiap;
+            MangKyNangAI[1] = KyNangXienGiap;
             MangKyNang[2] = KyNangTanCong;
             MangKyNangAI[2] = KyNangTanCong;
-            MangKyNang[3] = KyNangTanCongXuyenGiap;
-            MangKyNangAI[3] = KyNangTanCongXuyenGiap;
-            MangKyNang[4] = KyNangEpBuoc;
-            MangKyNangAI[4] = KyNangEpBuoc;
+            MangKyNang[3] = KyNangSuyGiam;
+            MangKyNangAI[3] = KyNangSuyGiam;
+            MangKyNang[4] = KyNangLoiKeoCuaTuThan;
+            MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
             
             // Debug Code
 
@@ -2071,6 +2124,40 @@ namespace WaifuCardsBattle
                     }
 
                     break;
+                case 31:
+                    if (luot_di == true)
+                        may_mau_toi_da = LoiKeoCuaTuThan(may_mau_toi_da);
+                    else
+                        nguoi_mau_toi_da = LoiKeoCuaTuThan(nguoi_mau_toi_da);
+
+                    if (may_mau_toi_da <= 0)
+                        may_mau_toi_da = 0;
+                    if (nguoi_mau_toi_da <= 0)
+                        nguoi_mau_toi_da = 0;
+                    break;
+                case 32:
+                    if (luot_di == true)
+                        AI.Thu = XienGiap(AI.Thu);                    
+                    else
+                        Nguoi.Thu = XienGiap(Nguoi.Thu);
+
+                    if (AI.Thu <= 0)
+                        AI.Thu = 0;
+                    if (Nguoi.Thu <= 0)
+                        Nguoi.Thu = 0;
+                    break;
+                case 33:
+                    if (luot_di == true)
+                        AI.Cong = SuyGiam(AI.Cong);               
+                    else
+                        Nguoi.Cong = SuyGiam(Nguoi.Cong);
+
+                    if (AI.Cong <= 0)
+                        AI.Cong = 0;
+                    if (Nguoi.Cong <= 0)
+                        Nguoi.Cong = 0;
+                    break;
+
             }
         }
 
