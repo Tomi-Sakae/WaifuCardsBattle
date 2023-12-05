@@ -428,9 +428,15 @@ namespace WaifuCardsBattle
             return --cong;
         }
 
+        static TheKyNang KyNangChuyenDoiKyNang = new TheKyNang(34, "Chuyển Đổi Kỹ Năng", "Thẻ Chuyển Đổi Kỹ Năng: Chọn ra một kỹ năng hiện có và trao đổi với kỹ năng ngẫu nhiên của đối thủ.");
+        static public void ChuyenDoiKyNang()
+        {
+            
+        }
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 33;
+        static int so_luong_ky_nang = 34;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -809,6 +815,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangSuyGiam;
                         break;
+                    case 34:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangChuyenDoiKyNang;
+                        else
+                            LuuKyNang[dem - 4] = KyNangChuyenDoiKyNang;
+                        break;
                 }
             }
             
@@ -1018,6 +1030,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangSuyGiam;
                         break;
+                    case 34:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangChuyenDoiKyNang;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangChuyenDoiKyNang;
+                        break;
                 }
             }
 
@@ -1036,8 +1054,8 @@ namespace WaifuCardsBattle
             MangKyNangAI[1] = KyNangXienGiap;
             MangKyNang[2] = KyNangTanCong;
             MangKyNangAI[2] = KyNangTanCong;
-            MangKyNang[3] = KyNangSuyGiam;
-            MangKyNangAI[3] = KyNangSuyGiam;
+            MangKyNang[3] = KyNangChuyenDoiKyNang;
+            MangKyNangAI[3] = KyNangChuyenDoiKyNang;
             MangKyNang[4] = KyNangLoiKeoCuaTuThan;
             MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
             
@@ -1753,8 +1771,7 @@ namespace WaifuCardsBattle
                         AI.Cong = SieuTangCuong(AI.Cong);
                         tang_cong_may = true;
                         luu_dem_sieu_tang_cuong_may = 2;
-                    }    
-                       
+                    }                
                     break;
                 case 11:
                     if (luot_di == true)
@@ -1771,7 +1788,6 @@ namespace WaifuCardsBattle
                         tang_giap_may = true;
                         luu_dem_giap_ao_may = 2;
                     }
-
                     break;
                 case 12:
                     if (luot_di == true)
@@ -1788,7 +1804,6 @@ namespace WaifuCardsBattle
                         tang_mau_ao_may = true;
                         luu_dem_mau_ao_may = 2;
                     }
-
                     break;
                 case 13:
                     if (luot_di == true)
@@ -1803,7 +1818,6 @@ namespace WaifuCardsBattle
                         if (Nguoi.Thu > 0)
                             Nguoi.Thu--;
                     }
-
                     break;
                 case 14:
                     if (luot_di == true)                   
@@ -1833,8 +1847,7 @@ namespace WaifuCardsBattle
                             if (AI.Mau >= may_mau_toi_da)
                                 AI.Mau = may_mau_toi_da;
                         }
-                    }    
-                       
+                    }                  
                     break;
                 case 16:
                     if (luot_di == true)
@@ -1849,7 +1862,6 @@ namespace WaifuCardsBattle
                         khien_bao_ve_may = true;
                         luu_dem_khien_bao_ve_may = 2;
                     }
-
                     break;
                 case 17:
                     if (luot_di == true)
@@ -1862,7 +1874,6 @@ namespace WaifuCardsBattle
                         DaoNguoc();
                         dao_nguoc_nguoi_choi = true;
                     }
-
                     break;
                 case 18:
                     if (luot_di == true)
@@ -1875,7 +1886,6 @@ namespace WaifuCardsBattle
                         HienThucHoa();
                         hien_thuc_hoa = true;
                     }
-
                     break;
                 case 19:
                     if (luot_di == true)
@@ -1892,7 +1902,6 @@ namespace WaifuCardsBattle
                         AI.Cong = Nguoi.Cong;
                         AI.Thu = Nguoi.Thu;
                     }
-
                     break;
                 case 20:
                     if (luot_di == true)
@@ -1907,7 +1916,7 @@ namespace WaifuCardsBattle
                             Console.Write(luu_chuoi_ky_nang);
                             thoi_luong = Console.ReadLine();
                             Console.SetCursorPosition(25, 10);
-                            for (int i = 0; i < luu_chuoi_ky_nang.Length + 10; i++)
+                            for (int i = 0; i < luu_chuoi_ky_nang.Length + thoi_luong.Length; i++)
                                 Console.Write(" ");
                         } while (int.Parse(thoi_luong) < 1);                        
                         luot_cho_bom_hen_gio_may = int.Parse(thoi_luong); // ép kiểu
@@ -1932,14 +1941,13 @@ namespace WaifuCardsBattle
                                 Console.Write(luu_chuoi_ky_nang);
                                 thoi_luong = Console.ReadLine();
                                 Console.SetCursorPosition(25, 10);
-                                for (int i = 0; i < luu_chuoi_ky_nang.Length + 10; i++)
+                                for (int i = 0; i < luu_chuoi_ky_nang.Length + thoi_luong.Length; i++)
                                     Console.Write(" ");
                             } while (int.Parse(thoi_luong) < 1);
                             luot_cho_bom_hen_gio_nguoi_choi = int.Parse(thoi_luong); // ép kiểu
                             kiem_tra_bom_hen_gio_nguoi_choi = true;
                         }    
                     }
-
                     break;
                 case 21:
                     if (luot_di == true)
@@ -1954,7 +1962,6 @@ namespace WaifuCardsBattle
                         cuong_hoa_may = true;
                         luu_dem_cuong_hoa_may = 2;
                     }
-
                     break;
                 case 22:
                     if (luot_di == true)
@@ -1969,7 +1976,6 @@ namespace WaifuCardsBattle
                         suy_yeu_nguoi_choi = true;
                         luu_dem_suy_yeu_nguoi_choi = 2;
                     }
-
                     break;
                 case 23:
                     if (luot_di == true)
@@ -1982,7 +1988,6 @@ namespace WaifuCardsBattle
                         AoAnh();
                         ao_anh_nguoi_choi = true;
                     }
-
                     break;
                 case 24:
                     if (luot_di == true)
@@ -2042,14 +2047,12 @@ namespace WaifuCardsBattle
                         }
 
                     }
-
                     break;
                 case 25:
                     if (luot_di == true)                  
                         sat_thuong_nguoi_choi = TanCongXuyenGiap(Nguoi.Cong);
                     else
                         sat_thuong_may = TanCongXuyenGiap(AI.Cong);
-
                     break;
                 case 26:
                     if (luot_di == true)
@@ -2064,7 +2067,6 @@ namespace WaifuCardsBattle
                         chuyen_doi_sat_thuong_nguoi_choi = true;
                         luu_dem_chuyen_doi_sat_thuong_nguoi_choi = 2;
                     }
-
                     break;
                 case 27:
                     if (luot_di == true)
@@ -2081,7 +2083,6 @@ namespace WaifuCardsBattle
                         may_mau_toi_da = AI.Mau;
                         AI.Mau = mau_tam;
                     }
-
                     break;
                 case 28:
                     if (luot_di == true)
@@ -2096,7 +2097,6 @@ namespace WaifuCardsBattle
                         giap_gai_may = true;
                         luu_dem_giap_gai_may = 2;
                     }
-
                     break;
                 case 29:
                     if (luot_di == true)
@@ -2109,7 +2109,6 @@ namespace WaifuCardsBattle
                         QuayRoi();
                         quay_roi_nguoi_choi = true;
                     }
-
                     break;
                 case 30:
                     if (luot_di == true)
@@ -2122,7 +2121,6 @@ namespace WaifuCardsBattle
                         EpBuoc();
                         ep_buoc_nguoi_choi = true;
                     }
-
                     break;
                 case 31:
                     if (luot_di == true)
@@ -2157,7 +2155,69 @@ namespace WaifuCardsBattle
                     if (Nguoi.Cong <= 0)
                         Nguoi.Cong = 0;
                     break;
+                case 34:
+                    if (luot_di == true)
+                    {
+                        ChuyenDoiKyNang();
+                        string ky_nang;
+                        string luu_chuoi_ky_nang;
+                        int id_ky_nang_may;                        
+                        do
+                        {
+                            Console.SetCursorPosition(25, 10);
+                            luu_chuoi_ky_nang = "Vui lòng nhập vị trí kỹ năng hiện có để chuyển đổi: ";
+                            Console.Write(luu_chuoi_ky_nang);
+                            ky_nang = Console.ReadLine();
+                            Console.SetCursorPosition(25, 10);
+                            for (int i = 0; i < luu_chuoi_ky_nang.Length + ky_nang.Length; i++)
+                                Console.Write(" ");                           
+                        } while (int.Parse(ky_nang) > 4 || int.Parse(ky_nang) < 1);
 
+                        id_ky_nang_may = rd.Next(1, 5);
+                        TheKyNang KyNangTam = new TheKyNang();
+                        KyNangTam = MangKyNangAI[id_ky_nang_may];
+                        MangKyNangAI[id_ky_nang_may] = MangKyNang[int.Parse(ky_nang)];
+                        MangKyNang[int.Parse(ky_nang)] = KyNangTam;
+
+                    }
+                    else
+                    {
+                        ChuyenDoiKyNang();
+                        int id_ky_nang_nguoi_choi;
+                        int id_ky_nang_may;
+                        if (choi_co_op == false && dao_nguoc_nguoi_choi == false)
+                        {
+                            id_ky_nang_nguoi_choi = rd.Next(1, 5);
+                            id_ky_nang_may = rd.Next(1, 5);
+                            TheKyNang KyNangTam = new TheKyNang();
+                            KyNangTam = MangKyNangAI[id_ky_nang_may];
+                            MangKyNangAI[id_ky_nang_may] = MangKyNang[id_ky_nang_nguoi_choi];
+                            MangKyNang[id_ky_nang_nguoi_choi] = KyNangTam;
+                        }
+                        else if (choi_co_op == true || dao_nguoc_nguoi_choi == true)
+                        {
+                            string ky_nang;
+                            string luu_chuoi_ky_nang;
+                            do
+                            {
+                                Console.SetCursorPosition(25, 10);
+                                luu_chuoi_ky_nang = "Vui lòng nhập vị trí kỹ năng hiện có để chuyển đổi: ";
+                                Console.Write(luu_chuoi_ky_nang);
+                                ky_nang = Console.ReadLine();
+                                Console.SetCursorPosition(25, 10);
+                                for (int i = 0; i < luu_chuoi_ky_nang.Length + ky_nang.Length; i++)
+                                    Console.Write(" ");
+                            } while (int.Parse(ky_nang) > 4 || int.Parse(ky_nang) < 1);
+
+                            id_ky_nang_nguoi_choi = rd.Next(1, 5);
+                            TheKyNang KyNangTam = new TheKyNang();
+                            KyNangTam = MangKyNangAI[int.Parse(ky_nang)];
+                            MangKyNangAI[int.Parse(ky_nang)] = MangKyNang[id_ky_nang_nguoi_choi];
+                            MangKyNang[id_ky_nang_nguoi_choi] = KyNangTam;
+                        }
+
+                    }    
+                    break;
             }
         }
 
