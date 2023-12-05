@@ -440,9 +440,24 @@ namespace WaifuCardsBattle
 
         }
 
+        static TheKyNang KyNangTanCongQuyDoi = new TheKyNang(36, "Tấn Công Quy Đổi", "Thẻ Tấn Công Quy Đổi: Tấn công đối thủ với lượng sát thương = lượng máu quy đổi.");
+        static public void TanCongQuyDoi()
+        {
+
+        }
+
+        static TheKyNang KyNangTanCongXuyenPha = new TheKyNang(37, "Tấn Công Xuyên Phá", "Thẻ Tấn Công Xuyên Phá: Tấn công đối thủ với 200% sức tấn công hiện tại và bản thân cũng bị ảnh hưởng.");
+        static public int TanCongXuyenPha(int cong, int thu)
+        {
+            if ((cong * 2 - thu) <= 0)
+                return 0;
+            else
+                return cong * 2 - thu;
+        }
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 35;
+        static int so_luong_ky_nang = 37;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -855,6 +870,18 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangLuaChonMaQuai;
                         break;
+                    case 36:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangTanCongQuyDoi;
+                        else
+                            LuuKyNang[dem - 4] = KyNangTanCongQuyDoi;
+                        break;
+                    case 37:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangTanCongXuyenPha;
+                        else
+                            LuuKyNang[dem - 4] = KyNangTanCongXuyenPha;
+                        break;
                 }
             }
             
@@ -1076,6 +1103,18 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangLuaChonMaQuai;
                         break;
+                    case 36:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangTanCongQuyDoi;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangTanCongQuyDoi;
+                        break;
+                    case 37:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangTanCongXuyenPha;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangTanCongXuyenPha;
+                        break;
                 }
             }
 
@@ -1092,10 +1131,10 @@ namespace WaifuCardsBattle
             */
             MangKyNang[1] = KyNangXienGiap;
             MangKyNangAI[1] = KyNangXienGiap;
-            MangKyNang[2] = KyNangLuaChonMaQuai;
-            MangKyNangAI[2] = KyNangLuaChonMaQuai;
-            MangKyNang[3] = KyNangChuyenDoiKyNang;
-            MangKyNangAI[3] = KyNangChuyenDoiKyNang;
+            MangKyNang[2] = KyNangTanCongXuyenPha;
+            MangKyNangAI[2] = KyNangTanCongXuyenPha;
+            MangKyNang[3] = KyNangTanCongQuyDoi;
+            MangKyNangAI[3] = KyNangTanCongQuyDoi;
             MangKyNang[4] = KyNangLoiKeoCuaTuThan;
             MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
             
@@ -2296,6 +2335,68 @@ namespace WaifuCardsBattle
                                 GiaoDienMay(x_giao_dien_may_tam, y_giao_dien_may_tam, van_dau_giao_dien_may_tam, kiem_tra_ky_nang_giao_dien_may_tam);
                         }
                     }
+                    break;
+                case 36:
+                    if (luot_di == true)
+                    {
+                        TanCongQuyDoi();
+                        string suc_tan_cong;
+                        string luu_chuoi_ky_nang;
+                        do
+                        {
+                            Console.SetCursorPosition(25, 10);
+                            luu_chuoi_ky_nang = "Vui lòng nhập lượng máu để quy đổi: ";
+                            Console.Write(luu_chuoi_ky_nang);
+                            suc_tan_cong = Console.ReadLine();
+                            Console.SetCursorPosition(25, 10);
+                            for (int i = 0; i < luu_chuoi_ky_nang.Length + suc_tan_cong.Length; i++)
+                                Console.Write(" ");
+                        } while (int.Parse(suc_tan_cong) < 0 || int.Parse(suc_tan_cong) > Nguoi.Mau);
+                        sat_thuong_nguoi_choi = int.Parse(suc_tan_cong);
+                        sat_thuong_nguoi_choi -= AI.Thu;
+                        Nguoi.Mau -= int.Parse(suc_tan_cong);
+                    }
+                    else
+                    {
+                        TanCongQuyDoi();
+                        if (choi_co_op == false && dao_nguoc_nguoi_choi == false)
+                        {
+                            int suc_tan_cong_may = rd.Next(1, AI.Mau);
+                            sat_thuong_may = suc_tan_cong_may;
+                            sat_thuong_may -= Nguoi.Thu;
+                            AI.Mau -= suc_tan_cong_may;
+                        }
+                        else if (choi_co_op == true || dao_nguoc_nguoi_choi == true)
+                        {
+                            string suc_tan_cong_may;
+                            string luu_chuoi_ky_nang;
+                            do
+                            {
+                                Console.SetCursorPosition(25, 10);
+                                luu_chuoi_ky_nang = "Vui lòng nhập lượng máu để quy đổi: ";
+                                Console.Write(luu_chuoi_ky_nang);
+                                suc_tan_cong_may = Console.ReadLine();
+                                Console.SetCursorPosition(25, 10);
+                                for (int i = 0; i < luu_chuoi_ky_nang.Length + suc_tan_cong_may.Length; i++)
+                                    Console.Write(" ");
+                            } while (int.Parse(suc_tan_cong_may) < 0 || int.Parse(suc_tan_cong_may) > AI.Mau);
+                            sat_thuong_may = int.Parse(suc_tan_cong_may);
+                            sat_thuong_may -= Nguoi.Thu;
+                            AI.Mau -= int.Parse(suc_tan_cong_may);
+                        }
+                    }
+                    break;
+                case 37:
+                    if (luot_di == true)
+                    {
+                        sat_thuong_nguoi_choi = TanCongXuyenPha(Nguoi.Cong, AI.Thu);
+                        Nguoi.Mau -= sat_thuong_nguoi_choi;
+                    }                           
+                    else
+                    {
+                        sat_thuong_may = TanCongXuyenPha(AI.Cong, Nguoi.Thu);
+                        AI.Mau -= sat_thuong_may;
+                    }                           
                     break;
             }
         }
