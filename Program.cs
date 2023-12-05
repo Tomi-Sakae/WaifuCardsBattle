@@ -434,9 +434,15 @@ namespace WaifuCardsBattle
             
         }
 
+        static TheKyNang KyNangLuaChonMaQuai = new TheKyNang(35, "Lựa Chọn Ma Quái", "Thẻ Lựa Chọn Ma Quái: Chọn ra và lấy một kỹ năng nằm trong danh sách những kỹ năng đã sử dụng hoặc chưa sử dụng.");
+        static public void LuaChonMaQuai()
+        {
+
+        }
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 34;
+        static int so_luong_ky_nang = 35;
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -453,6 +459,28 @@ namespace WaifuCardsBattle
         static int sat_thuong_may;
         static bool luot_di_tam = false;
         static bool choi_co_op = false;
+
+        static int luu_vi_tri = 0;
+        static int kiem_tra_thu_tu = 0;
+        static bool kiem_tra_hanh_dong = false;
+
+        static int kiem_tra_thu_tu_da_dung = 0;
+        static int kiem_tra_thu_tu_da_dungAI = 0;
+
+        static int luu_vi_triAI = 0;
+        static int kiem_tra_thu_tuAI = 0;
+        static bool kiem_tra_hanh_dongAI = false;
+
+        static int x_giao_dien_nguoi_choi_tam;
+        static int y_giao_dien_nguoi_choi_tam;
+        static string van_dau_giao_dien_nguoi_choi_tam;
+        static bool kiem_tra_ky_nang_giao_dien_nguoi_choi_tam;
+
+        static int x_giao_dien_may_tam;
+        static int y_giao_dien_may_tam;
+        static string van_dau_giao_dien_may_tam;
+        static bool kiem_tra_ky_nang_giao_dien_may_tam;
+
         static void Main(string[] args)
         {
             menu();
@@ -489,17 +517,17 @@ namespace WaifuCardsBattle
 
                 switch (lua_chon.Key)
                 {
-                    case ConsoleKey.W:
+                    case ConsoleKey.UpArrow:
                         if (y >= 9)
                             y -= 2;
                         break;
 
-                    case ConsoleKey.S:
+                    case ConsoleKey.DownArrow:
                         if (y <= 11)
                             y += 2;
                         break;
 
-                    case ConsoleKey.K:
+                    case ConsoleKey.Enter:
                         Console.Clear();
                         if (y == 7)
                             Choi();
@@ -530,7 +558,7 @@ namespace WaifuCardsBattle
 
                 switch (lua_chon.Key)
                 {
-                    case ConsoleKey.Q:
+                    case ConsoleKey.Backspace:
                         return;
                 }
             }
@@ -821,6 +849,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangChuyenDoiKyNang;
                         break;
+                    case 35:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangLuaChonMaQuai;
+                        else
+                            LuuKyNang[dem - 4] = KyNangLuaChonMaQuai;
+                        break;
                 }
             }
             
@@ -1036,6 +1070,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangChuyenDoiKyNang;
                         break;
+                    case 35:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangLuaChonMaQuai;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangLuaChonMaQuai;
+                        break;
                 }
             }
 
@@ -1052,25 +1092,14 @@ namespace WaifuCardsBattle
             */
             MangKyNang[1] = KyNangXienGiap;
             MangKyNangAI[1] = KyNangXienGiap;
-            MangKyNang[2] = KyNangTanCong;
-            MangKyNangAI[2] = KyNangTanCong;
+            MangKyNang[2] = KyNangLuaChonMaQuai;
+            MangKyNangAI[2] = KyNangLuaChonMaQuai;
             MangKyNang[3] = KyNangChuyenDoiKyNang;
             MangKyNangAI[3] = KyNangChuyenDoiKyNang;
             MangKyNang[4] = KyNangLoiKeoCuaTuThan;
             MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
             
             // Debug Code
-
-            int luu_vi_tri = 0;
-            int kiem_tra_thu_tu = 0;
-            bool kiem_tra_hanh_dong = false;
-
-            int kiem_tra_thu_tu_da_dung = 0;
-            int kiem_tra_thu_tu_da_dungAI = 0;
-
-            int luu_vi_triAI = 0;
-            int kiem_tra_thu_tuAI = 0;
-            bool kiem_tra_hanh_dongAI = false;
 
             while (true)
             {
@@ -1163,65 +1192,8 @@ namespace WaifuCardsBattle
                     if (AI.Mau <= 0)
                         van_dau = "Người chơi 1 đã chiến thắng!";
                 }
-                
 
-
-                if(kiem_tra_bom_hen_gio_may == true)
-                {
-                    Console.SetCursorPosition(31, 1);
-                    Console.Write("B - " + luot_cho_bom_hen_gio_may);
-                }    
-
-                Console.SetCursorPosition(25, 2);
-                if (kiem_tra_ky_nangAI == true)
-                    Console.Write("*");
-                Console.WriteLine("Thẻ: "+ AI.Ten +" Máu: "+ AI.Mau +"/"+ may_mau_toi_da+" Công: "+ AI.Cong + " Thủ: "+ AI.Thu);
-
-                Console.SetCursorPosition(25, 10);
-                Console.WriteLine(van_dau);
-
-                if (kiem_tra_bom_hen_gio_nguoi_choi == true)
-                {
-                    Console.SetCursorPosition(31, 17);
-                    Console.Write("B - " + luot_cho_bom_hen_gio_nguoi_choi);
-                }
-
-                Console.SetCursorPosition(25, 18);
-                if (kiem_tra_ky_nang == true)
-                    Console.Write("*");
-                Console.WriteLine("Thẻ: " + Nguoi.Ten +" Máu: "+ Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: "+ Nguoi.Thu);
-                Console.SetCursorPosition(27, 20);
-                if (ao_anh_nguoi_choi == false)
-                    Console.WriteLine(MangKyNang[1].Ten);
-                else
-                    Console.WriteLine(AI.Ten);
-                Console.SetCursorPosition(27, 22);
-                if (ao_anh_nguoi_choi == false)
-                    Console.WriteLine(MangKyNang[2].Ten);
-                else
-                    Console.WriteLine(AI.Ten);
-                Console.SetCursorPosition(27, 24);
-                if (ao_anh_nguoi_choi == false)
-                    Console.WriteLine(MangKyNang[3].Ten);
-                else
-                    Console.WriteLine(AI.Ten);
-                Console.SetCursorPosition(27, 26);
-                if (ao_anh_nguoi_choi == false)
-                    Console.WriteLine(MangKyNang[4].Ten);
-                else
-                    Console.WriteLine(AI.Ten);
-                Console.SetCursorPosition(27, 28);
-                if(kiem_tra_ky_nang == true)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(Nguoi.Ky_nang_toi_thuong);
-                    Console.ResetColor();
-                }    
-               
-
-                Console.SetCursorPosition(x, y);
-                Console.Write("->");
-
+                GiaoDienNguoiChoi(x, y, van_dau, kiem_tra_ky_nang);
                 x_tam = x;
                 y_tam = y;
 
@@ -1239,7 +1211,7 @@ namespace WaifuCardsBattle
                             {
                                 if (ep_buoc_nguoi_choi == true)
                                     Thread.Sleep(1000);
-                                lua_chon = new ConsoleKeyInfo('K', ConsoleKey.K, false, false, false);
+                                lua_chon = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false);
                                 int lua_chon_nguoi_choi;
                                 if (kiem_tra_ky_nang == true)
                                     lua_chon_nguoi_choi = rd.Next(1, 6);
@@ -1263,7 +1235,7 @@ namespace WaifuCardsBattle
                         {
                             if (quay_roi_nguoi_choi == true)
                             {
-                                lua_chon = new ConsoleKeyInfo('K', ConsoleKey.K, false, false, false);
+                                lua_chon = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false);
                                 int lua_chon_nguoi_choi;
                                 if (kiem_tra_ky_nang == true)
                                     lua_chon_nguoi_choi = rd.Next(1, 6);
@@ -1288,14 +1260,19 @@ namespace WaifuCardsBattle
                         if (dao_nguoc_nguoi_choi == true) // Đảo ngược
                             luot_di_tam = !luot_di_tam;
 
+                        x_giao_dien_nguoi_choi_tam = x;
+                        y_giao_dien_nguoi_choi_tam = y;
+                        van_dau_giao_dien_nguoi_choi_tam = van_dau;
+                        kiem_tra_ky_nang_giao_dien_nguoi_choi_tam = kiem_tra_ky_nang;
+
                         switch (lua_chon.Key)
                         {
-                            case ConsoleKey.W:
+                            case ConsoleKey.UpArrow:
                                 if (y >= 22)
                                     y -= 2;
                                 break;
 
-                            case ConsoleKey.S:
+                            case ConsoleKey.DownArrow:
                                 int vi_tri_y = 24;
                                 if (kiem_tra_ky_nang == true)
                                     vi_tri_y = 26;
@@ -1322,37 +1299,37 @@ namespace WaifuCardsBattle
                                 Console.Clear();
                                 break;
 
-                            case ConsoleKey.K:
+                            case ConsoleKey.Enter:
                                 if (y == 20)
                                 {
-                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[1].Ten + "!";
-                                    KyNang(MangKyNang[1].Id, luot_di_tam);
                                     luu_vi_tri = 1;
                                     kiem_tra_hanh_dong = true;
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[1].Ten + "!";
+                                    KyNang(MangKyNang[1].Id, luot_di_tam);                              
                                 }
 
                                 if (y == 22)
                                 {
-                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[2].Ten + "!";
-                                    KyNang(MangKyNang[2].Id, luot_di_tam);
                                     luu_vi_tri = 2;
                                     kiem_tra_hanh_dong = true;
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[2].Ten + "!";
+                                    KyNang(MangKyNang[2].Id, luot_di_tam);                                    
                                 }
 
                                 if (y == 24)
                                 {
-                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[3].Ten + "!";
-                                    KyNang(MangKyNang[3].Id, luot_di_tam);
                                     luu_vi_tri = 3;
                                     kiem_tra_hanh_dong = true;
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[3].Ten + "!";
+                                    KyNang(MangKyNang[3].Id, luot_di_tam);                                    
                                 }
 
                                 if (y == 26)
                                 {
-                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[4].Ten + "!";
-                                    KyNang(MangKyNang[4].Id, luot_di_tam);
                                     luu_vi_tri = 4;
                                     kiem_tra_hanh_dong = true;
+                                    van_dau = Nguoi.Ten + " vừa sử dụng thẻ kỹ năng " + MangKyNang[4].Ten + "!";
+                                    KyNang(MangKyNang[4].Id, luot_di_tam);                                   
                                 }
                                 if (y == 28)
                                 {
@@ -1402,7 +1379,7 @@ namespace WaifuCardsBattle
                                 Console.Clear();
                                 break;
 
-                            case ConsoleKey.Q:
+                            case ConsoleKey.Backspace:
                                 return;
                         }
                     }
@@ -1425,6 +1402,11 @@ namespace WaifuCardsBattle
                         luot_di_tam = luot_di;
                         if (dao_nguoc_may == true) // Đảo ngược
                             luot_di_tam = !luot_di_tam;
+
+                        x_giao_dien_may_tam = x;
+                        y_giao_dien_may_tam = y;
+                        van_dau_giao_dien_may_tam = van_dau;
+                        kiem_tra_ky_nang_giao_dien_may_tam = kiem_tra_ky_nangAI;
 
                         if (id == 1)
                         {
@@ -1529,62 +1511,7 @@ namespace WaifuCardsBattle
             Console.Clear();
             while(true)
             {
-                if (kiem_tra_bom_hen_gio_nguoi_choi == true)
-                {
-                    Console.SetCursorPosition(31, 1);
-                    Console.Write("B - " + luot_cho_bom_hen_gio_nguoi_choi);
-                }
-
-                Console.SetCursorPosition(25, 2);
-                if (kiem_tra_ky_nang == true)
-                    Console.Write("*");
-                Console.WriteLine("Thẻ: " + Nguoi.Ten + " Máu: " + Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: " + Nguoi.Thu);
-
-                Console.SetCursorPosition(25, 10);
-                Console.WriteLine(van_dau);
-
-                if (kiem_tra_bom_hen_gio_may == true)
-                {
-                    Console.SetCursorPosition(31, 17);
-                    Console.Write("B - " + luot_cho_bom_hen_gio_may);
-                }
-
-                Console.SetCursorPosition(25, 18);
-                if (kiem_tra_ky_nangAI == true)
-                    Console.Write("*");
-                Console.WriteLine("Thẻ: " + AI.Ten + " Máu: " + AI.Mau + "/" + may_mau_toi_da + " Công: " + AI.Cong + " Thủ: " + AI.Thu);
-                Console.SetCursorPosition(27, 20);
-                if (ao_anh_may == false)
-                    Console.WriteLine(MangKyNangAI[1].Ten);
-                else
-                    Console.WriteLine(Nguoi.Ten);
-                Console.SetCursorPosition(27, 22);
-                if (ao_anh_may == false)
-                    Console.WriteLine(MangKyNangAI[2].Ten);
-                else
-                    Console.WriteLine(Nguoi.Ten);
-                Console.SetCursorPosition(27, 24);
-                if (ao_anh_may == false)
-                    Console.WriteLine(MangKyNangAI[3].Ten);
-                else
-                    Console.WriteLine(Nguoi.Ten);
-                Console.SetCursorPosition(27, 26);
-                if (ao_anh_may == false)
-                    Console.WriteLine(MangKyNangAI[4].Ten);
-                else
-                    Console.WriteLine(Nguoi.Ten);
-                Console.SetCursorPosition(27, 28);
-                if (kiem_tra_ky_nangAI == true)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(AI.Ky_nang_toi_thuong);
-                    Console.ResetColor();
-                }
-
-
-                Console.SetCursorPosition(x, y);
-                Console.Write("->");
-
+                GiaoDienMay(x, y, van_dau, kiem_tra_ky_nang);
                 x_tam = x;
                 y_tam = y;
 
@@ -1592,12 +1519,12 @@ namespace WaifuCardsBattle
 
                 switch (lua_chon.Key)
                 {
-                    case ConsoleKey.W:
+                    case ConsoleKey.UpArrow:
                         if (y >= 22)
                             y -= 2;
                         break;
 
-                    case ConsoleKey.S:
+                    case ConsoleKey.DownArrow:
                         int vi_tri_y = 24;
                         if (kiem_tra_ky_nangAI == true)
                             vi_tri_y = 26;
@@ -1624,7 +1551,7 @@ namespace WaifuCardsBattle
                         Console.Clear();
                         break;
 
-                    case ConsoleKey.K:
+                    case ConsoleKey.Enter:
                         if (y == 20)
                             return 1;
                         if (y == 22)
@@ -1640,6 +1567,124 @@ namespace WaifuCardsBattle
                 Console.SetCursorPosition(x_tam, y_tam);
                 Console.Write("  ");
             }   
+        }
+
+        static void GiaoDienNguoiChoi(int x, int y, string van_dau, bool kiem_tra_ky_nang)
+        {
+            if (kiem_tra_bom_hen_gio_may == true)
+            {
+                Console.SetCursorPosition(31, 1);
+                Console.Write("B - " + luot_cho_bom_hen_gio_may);
+            }
+
+            Console.SetCursorPosition(25, 2);
+            if (kiem_tra_ky_nangAI == true)
+                Console.Write("*");
+            Console.WriteLine("Thẻ: " + AI.Ten + " Máu: " + AI.Mau + "/" + may_mau_toi_da + " Công: " + AI.Cong + " Thủ: " + AI.Thu);
+
+            Console.SetCursorPosition(25, 10);
+            Console.WriteLine(van_dau);
+
+            if (kiem_tra_bom_hen_gio_nguoi_choi == true)
+            {
+                Console.SetCursorPosition(31, 17);
+                Console.Write("B - " + luot_cho_bom_hen_gio_nguoi_choi);
+            }
+
+            Console.SetCursorPosition(25, 18);
+            if (kiem_tra_ky_nang == true)
+                Console.Write("*");
+            Console.WriteLine("Thẻ: " + Nguoi.Ten + " Máu: " + Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: " + Nguoi.Thu);
+            Console.SetCursorPosition(27, 20);
+            if (ao_anh_nguoi_choi == false)
+                Console.WriteLine(MangKyNang[1].Ten);
+            else
+                Console.WriteLine(AI.Ten);
+            Console.SetCursorPosition(27, 22);
+            if (ao_anh_nguoi_choi == false)
+                Console.WriteLine(MangKyNang[2].Ten);
+            else
+                Console.WriteLine(AI.Ten);
+            Console.SetCursorPosition(27, 24);
+            if (ao_anh_nguoi_choi == false)
+                Console.WriteLine(MangKyNang[3].Ten);
+            else
+                Console.WriteLine(AI.Ten);
+            Console.SetCursorPosition(27, 26);
+            if (ao_anh_nguoi_choi == false)
+                Console.WriteLine(MangKyNang[4].Ten);
+            else
+                Console.WriteLine(AI.Ten);
+            Console.SetCursorPosition(27, 28);
+            if (kiem_tra_ky_nang == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(Nguoi.Ky_nang_toi_thuong);
+                Console.ResetColor();
+            }
+
+
+            Console.SetCursorPosition(x, y);
+            Console.Write("->");
+        }
+
+        static void GiaoDienMay(int x, int y, string van_dau, bool kiem_tra_ky_nang)
+        {
+            if (kiem_tra_bom_hen_gio_nguoi_choi == true)
+            {
+                Console.SetCursorPosition(31, 1);
+                Console.Write("B - " + luot_cho_bom_hen_gio_nguoi_choi);
+            }
+
+            Console.SetCursorPosition(25, 2);
+            if (kiem_tra_ky_nang == true)
+                Console.Write("*");
+            Console.WriteLine("Thẻ: " + Nguoi.Ten + " Máu: " + Nguoi.Mau + "/" + nguoi_mau_toi_da + " Công: " + Nguoi.Cong + " Thủ: " + Nguoi.Thu);
+
+            Console.SetCursorPosition(25, 10);
+            Console.WriteLine(van_dau);
+
+            if (kiem_tra_bom_hen_gio_may == true)
+            {
+                Console.SetCursorPosition(31, 17);
+                Console.Write("B - " + luot_cho_bom_hen_gio_may);
+            }
+
+            Console.SetCursorPosition(25, 18);
+            if (kiem_tra_ky_nangAI == true)
+                Console.Write("*");
+            Console.WriteLine("Thẻ: " + AI.Ten + " Máu: " + AI.Mau + "/" + may_mau_toi_da + " Công: " + AI.Cong + " Thủ: " + AI.Thu);
+            Console.SetCursorPosition(27, 20);
+            if (ao_anh_may == false)
+                Console.WriteLine(MangKyNangAI[1].Ten);
+            else
+                Console.WriteLine(Nguoi.Ten);
+            Console.SetCursorPosition(27, 22);
+            if (ao_anh_may == false)
+                Console.WriteLine(MangKyNangAI[2].Ten);
+            else
+                Console.WriteLine(Nguoi.Ten);
+            Console.SetCursorPosition(27, 24);
+            if (ao_anh_may == false)
+                Console.WriteLine(MangKyNangAI[3].Ten);
+            else
+                Console.WriteLine(Nguoi.Ten);
+            Console.SetCursorPosition(27, 26);
+            if (ao_anh_may == false)
+                Console.WriteLine(MangKyNangAI[4].Ten);
+            else
+                Console.WriteLine(Nguoi.Ten);
+            Console.SetCursorPosition(27, 28);
+            if (kiem_tra_ky_nangAI == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(AI.Ky_nang_toi_thuong);
+                Console.ResetColor();
+            }
+
+
+            Console.SetCursorPosition(x, y);
+            Console.Write("->");
         }
 
         static void ThongTin(int id)
@@ -1676,7 +1721,7 @@ namespace WaifuCardsBattle
 
                 switch (lua_chon.Key)
                 {
-                    case ConsoleKey.Q:
+                    case ConsoleKey.Backspace:
                         return;
                 }
             }    
@@ -2218,6 +2263,123 @@ namespace WaifuCardsBattle
 
                     }    
                     break;
+                case 35:
+                    if (luot_di == true)
+                    {
+                        LuaChonMaQuai();
+                        Console.Clear();
+                        TheKyNang ky_nang_tam = DanhSachKyNang();
+                        MangKyNang[luu_vi_tri] = ky_nang_tam;
+                        kiem_tra_hanh_dong = false;
+                        GiaoDienNguoiChoi(x_giao_dien_nguoi_choi_tam, y_giao_dien_nguoi_choi_tam, van_dau_giao_dien_nguoi_choi_tam, kiem_tra_ky_nang_giao_dien_nguoi_choi_tam);
+                    }
+                    else
+                    {
+                        LuaChonMaQuai();
+                        TheKyNang ky_nang_tam;
+                        if (choi_co_op == false && dao_nguoc_nguoi_choi == false)
+                        {
+                            int id_lua_chon_ma_quai_may = rd.Next(1, so_luong_ky_nang - 4);
+                            ky_nang_tam = LuuKyNangAI[id_lua_chon_ma_quai_may];
+                            MangKyNangAI[luu_vi_triAI] = ky_nang_tam;
+                            kiem_tra_hanh_dongAI = false;
+                        }
+                        else if (choi_co_op == true || dao_nguoc_nguoi_choi == true)
+                        {
+                            Console.Clear();
+                            ky_nang_tam = DanhSachKyNang();
+                            MangKyNangAI[luu_vi_triAI] = ky_nang_tam;
+                            kiem_tra_hanh_dongAI = false;
+                            if (dao_nguoc_nguoi_choi == true)
+                                GiaoDienNguoiChoi(x_giao_dien_nguoi_choi_tam, y_giao_dien_nguoi_choi_tam, van_dau_giao_dien_nguoi_choi_tam, kiem_tra_ky_nang_giao_dien_nguoi_choi_tam);
+                            if (choi_co_op == true)
+                                GiaoDienMay(x_giao_dien_may_tam, y_giao_dien_may_tam, van_dau_giao_dien_may_tam, kiem_tra_ky_nang_giao_dien_may_tam);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        static TheKyNang DanhSachKyNang()
+        {
+            int x = 5, y = 7;
+            int x_tam, y_tam;
+            int x_lap, y_lap;
+            int trang = 1, so_trang = (so_luong_ky_nang - 4) / 5;
+            int hien_thi_ky_nang = 1;
+
+            while (true)
+            {
+                Console.Clear();
+                
+                x_lap = 7;
+                y_lap = 7;
+                Console.SetCursorPosition(5, 5);
+                Console.WriteLine("Danh Sách Kỹ Năng");
+                for(int i = hien_thi_ky_nang; i <= hien_thi_ky_nang+4; i++)
+                {
+                    Console.SetCursorPosition(x_lap, y_lap);
+                    Console.WriteLine(LuuKyNang[i].Ten);
+                    y_lap += 2;
+                }
+                Console.SetCursorPosition(5, 17);
+                Console.WriteLine("<"+trang + "/" + so_trang+">");
+
+                Console.SetCursorPosition(x, y);
+                Console.Write("->");
+
+
+                x_tam = x;
+                y_tam = y;
+
+                ConsoleKeyInfo lua_chon = Console.ReadKey();
+
+                switch (lua_chon.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (y >= 9)
+                            y -= 2;
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        if (y <= 13)
+                            y += 2;
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        if (trang > 1)
+                        {
+                            trang--;
+                            hien_thi_ky_nang -= 5;
+                        }           
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        if (trang < so_trang)
+                        {
+                            trang++;
+                            hien_thi_ky_nang += 5;
+                        }                              
+                        break;
+
+                    case ConsoleKey.Enter:
+                        Console.Clear();
+                        if (y == 7)
+                            return LuuKyNang[hien_thi_ky_nang];
+                        if (y == 9)
+                            return LuuKyNang[hien_thi_ky_nang+1];
+                        if (y == 11)
+                            return LuuKyNang[hien_thi_ky_nang+2];
+                        if (y == 13)
+                            return LuuKyNang[hien_thi_ky_nang+3];
+                        if (y == 15)
+                            return LuuKyNang[hien_thi_ky_nang+4];
+                        break;
+
+                }
+
+                Console.SetCursorPosition(x_tam, y_tam);
+                Console.Write("  ");
             }
         }
 
@@ -2366,6 +2528,7 @@ namespace WaifuCardsBattle
 
                     if (ep_buoc_may == true) // 1 lượt thì bình thường                
                         ep_buoc_may = false;
+
                 }
                 else // Máy
                 {
