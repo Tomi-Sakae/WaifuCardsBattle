@@ -477,9 +477,25 @@ namespace WaifuCardsBattle
         static int luu_dem_nhin_thau_nguoi_choi;
         static int luu_dem_nhin_thau_may;
 
+        static TheKyNang KyNangThienDuong = new TheKyNang(40, "Thiên Đường", "Thẻ Thiên Đường: Trong lúc còn hiệu lực, tăng 10 máu sau mỗi lượt.");
+        static public void ThienDuong()
+        {
+
+        }
+
+        static bool thien_duong_nguoi_choi = false;
+        static bool thien_duong_may = false;
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 39;
+        static int so_luong_ky_nang = 40;
+        static int dem_hieu_ung = 1;
+        static int so_luong_hieu_ung = 0;
+        static string[] TenHieuUng = new string[100];
+        static int dem_hieu_ungAI = 1;
+        static int so_luong_hieu_ungAI = 0;
+        static string[] TenHieuUngAI = new string[100];
+
 
         static int nguoi_mau_toi_da;
         static int may_mau_toi_da;
@@ -916,6 +932,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangNhinThauDoiPhuong;
                         break;
+                    case 40:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangThienDuong;
+                        else
+                            LuuKyNang[dem - 4] = KyNangThienDuong;
+                        break;
                 }
             }
             
@@ -1161,6 +1183,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangNhinThauDoiPhuong;
                         break;
+                    case 40:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangThienDuong;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangThienDuong;
+                        break;
                 }
             }
 
@@ -1174,16 +1202,16 @@ namespace WaifuCardsBattle
                 MangKyNang[test] = KyNangDaoNguoc;
                 MangKyNangAI[test] = KyNangDaoNguoc;
             }
-            
-            MangKyNang[1] = KyNangXienGiap;
-            MangKyNangAI[1] = KyNangXienGiap;
+            */
+            MangKyNang[1] = KyNangThienDuong;
+            MangKyNangAI[1] = KyNangThienDuong;
             MangKyNang[2] = KyNangTanCongXuyenPha;
             MangKyNangAI[2] = KyNangTanCongXuyenPha;
             MangKyNang[3] = KyNangNhinThauDoiPhuong;
             MangKyNangAI[3] = KyNangNhinThauDoiPhuong;
             MangKyNang[4] = KyNangLoiKeoCuaTuThan;
             MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
-            */
+            
             // Debug Code
 
             while (true)
@@ -1656,6 +1684,8 @@ namespace WaifuCardsBattle
 
         static void GiaoDienNguoiChoi(int x, int y, string van_dau, bool kiem_tra_ky_nang)
         {
+            int x_hieu_ung;
+            int y_hieu_ung;
             if (kiem_tra_ky_nangAI == true)
             {
                 Console.SetCursorPosition(47, 3);
@@ -1701,6 +1731,16 @@ namespace WaifuCardsBattle
             }
             else
                 Console.WriteLine(MangKyNangAI[1].Ten);
+
+            x_hieu_ung = 80;
+            y_hieu_ung = 3;
+            for (int i = 1; i <= so_luong_hieu_ungAI; i++)
+            {
+                Console.SetCursorPosition(x_hieu_ung, y_hieu_ung);
+                Console.WriteLine(TenHieuUngAI[i]);
+
+                y_hieu_ung += 2;
+            }
 
             if (kiem_tra_bom_hen_gio_may == true)
             {
@@ -1750,13 +1790,24 @@ namespace WaifuCardsBattle
                 Console.ResetColor();
             }
 
+            x_hieu_ung = 80;
+            y_hieu_ung = 28;
+            for (int i = 1; i <= so_luong_hieu_ung; i++)
+            {
+                Console.SetCursorPosition(x_hieu_ung, y_hieu_ung);
+                Console.WriteLine(TenHieuUng[i]);
 
+                y_hieu_ung += 2;
+            }    
+            
             Console.SetCursorPosition(x, y);
             Console.Write("->");
+
         }
 
         static void GiaoDienMay(int x, int y, string van_dau, bool kiem_tra_ky_nang)
         {
+            int x_hieu_ung, y_hieu_ung;
             if (kiem_tra_ky_nang == true)
             {
                 Console.SetCursorPosition(47, 3);
@@ -1802,6 +1853,16 @@ namespace WaifuCardsBattle
             }
             else
                 Console.WriteLine(MangKyNang[1].Ten);
+
+            x_hieu_ung = 80;
+            y_hieu_ung = 28;
+            for (int i = 1; i <= so_luong_hieu_ung; i++)
+            {
+                Console.SetCursorPosition(x_hieu_ung, y_hieu_ung);
+                Console.WriteLine(TenHieuUng[i]);
+
+                y_hieu_ung += 2;
+            }
 
             if (kiem_tra_bom_hen_gio_nguoi_choi == true)
             {
@@ -1851,6 +1912,15 @@ namespace WaifuCardsBattle
                 Console.ResetColor();
             }
 
+            x_hieu_ung = 80;
+            y_hieu_ung = 3;
+            for (int i = 1; i <= so_luong_hieu_ungAI; i++)
+            {
+                Console.SetCursorPosition(x_hieu_ung, y_hieu_ung);
+                Console.WriteLine(TenHieuUngAI[i]);
+
+                y_hieu_ung += 2;
+            }
 
             Console.SetCursorPosition(x, y);
             Console.Write("->");
@@ -2558,6 +2628,30 @@ namespace WaifuCardsBattle
                         luu_dem_nhin_thau_nguoi_choi = 2;
                     }
                     break;
+                case 40:
+                    if (luot_di == true)
+                    {
+                        ThienDuong();
+                        if (thien_duong_nguoi_choi == false)
+                        {
+                            TenHieuUng[dem_hieu_ung] = "Thiên Đường: + 10 máu/lượt.";
+                            dem_hieu_ung++;
+                            so_luong_hieu_ung++;
+                            thien_duong_nguoi_choi = true;
+                        }             
+                    }
+                    else
+                    {
+                        ThienDuong();
+                        if (thien_duong_may == false)
+                        {                         
+                            TenHieuUngAI[dem_hieu_ungAI] = "Thiên Đường: + 10 máu/lượt.";
+                            dem_hieu_ungAI++;
+                            so_luong_hieu_ungAI++;
+                            thien_duong_may = true;
+                        }
+                    }
+                    break;
             }
         }
 
@@ -2667,9 +2761,9 @@ namespace WaifuCardsBattle
         {
             if (hien_thuc_hoa == false)
             {
-                if (kiem_tra == true) // Người
+                if (kiem_tra == true) // Sau khi máy kết thúc lượt
                 {
-                    if (giam_cong_may == true) // 1 lượt thì bình thường
+                    if (giam_cong_may == true)
                     {
                         giam_cong_may = false;
                         AI.Cong *= 2;
@@ -2682,7 +2776,7 @@ namespace WaifuCardsBattle
                         dem_thoi_gian--;
                     }
 
-                    if (giam_thu_nguoi_choi == true) // 2 lượt thì đảo lại hiệu ứng của máy để bên người và hiệu ứng người để bên máy
+                    if (giam_thu_nguoi_choi == true) 
                     {
                         if (luu_dem_pha_giap_nguoi_choi == 1)
                         {
@@ -2693,7 +2787,7 @@ namespace WaifuCardsBattle
                             luu_dem_pha_giap_nguoi_choi--;
                     }
 
-                    if (tang_cong_may == true) // 2 lượt
+                    if (tang_cong_may == true)
                     {
                         if (luu_dem_sieu_tang_cuong_may == 1)
                         {
@@ -2704,7 +2798,7 @@ namespace WaifuCardsBattle
                             luu_dem_sieu_tang_cuong_may--;
                     }
 
-                    if (tang_giap_may == true) // 2 lượt
+                    if (tang_giap_may == true)
                     {
                         if (luu_dem_giap_ao_may == 1)
                         {
@@ -2715,7 +2809,7 @@ namespace WaifuCardsBattle
                             luu_dem_giap_ao_may--;
                     }
 
-                    if (tang_mau_ao_may == true) // 2 lượt
+                    if (tang_mau_ao_may == true)
                     {
                         if (luu_dem_mau_ao_may == 1)
                         {
@@ -2726,7 +2820,7 @@ namespace WaifuCardsBattle
                             luu_dem_mau_ao_may--;
                     }
 
-                    if (khien_bao_ve_may == true) // 2 lượt
+                    if (khien_bao_ve_may == true)
                     {
                         if (luu_dem_khien_bao_ve_may == 1)
                             khien_bao_ve_may = false;
@@ -2734,7 +2828,7 @@ namespace WaifuCardsBattle
                             luu_dem_khien_bao_ve_may--;
                     }
 
-                    if (dao_nguoc_may == true) // 1 lượt thì bình thường                
+                    if (dao_nguoc_may == true)                
                         dao_nguoc_may = false;
                     
                     if (kiem_tra_bom_hen_gio_may == true)
@@ -2748,7 +2842,7 @@ namespace WaifuCardsBattle
                             luot_cho_bom_hen_gio_may--;
                     }
 
-                    if (cuong_hoa_may == true) // 2 lượt
+                    if (cuong_hoa_may == true)
                     {
                         if (luu_dem_cuong_hoa_may == 1)                        
                             cuong_hoa_may = false;                       
@@ -2756,7 +2850,7 @@ namespace WaifuCardsBattle
                             luu_dem_cuong_hoa_may--;
                     }
 
-                    if (suy_yeu_nguoi_choi == true) // 2 lượt
+                    if (suy_yeu_nguoi_choi == true)
                     {
                         if (luu_dem_suy_yeu_nguoi_choi == 1)
                             suy_yeu_nguoi_choi = false;
@@ -2764,7 +2858,7 @@ namespace WaifuCardsBattle
                             luu_dem_suy_yeu_nguoi_choi--;
                     }
                     
-                    if (chuyen_doi_sat_thuong_nguoi_choi == true) // 2 lượt
+                    if (chuyen_doi_sat_thuong_nguoi_choi == true)
                     {
                         if (luu_dem_chuyen_doi_sat_thuong_nguoi_choi == 1)
                         {
@@ -2774,7 +2868,7 @@ namespace WaifuCardsBattle
                             luu_dem_chuyen_doi_sat_thuong_nguoi_choi--;
                     }    
 
-                    if (giap_gai_may == true) // 2 lượt
+                    if (giap_gai_may == true)
                     {
                         if (luu_dem_giap_gai_may == 1)
                         {
@@ -2784,13 +2878,13 @@ namespace WaifuCardsBattle
                             luu_dem_giap_gai_may--;
                     }
 
-                    if (quay_roi_may == true) // 1 lượt thì bình thường                
+                    if (quay_roi_may == true)                
                         quay_roi_may = false;
 
-                    if (ep_buoc_may == true) // 1 lượt thì bình thường                
+                    if (ep_buoc_may == true)                
                         ep_buoc_may = false;
 
-                    if (suy_thoai_nguoi_choi == true) // 2 lượt
+                    if (suy_thoai_nguoi_choi == true)
                     {
                         if (luu_dem_suy_thoai_nguoi_choi == 1)
                         {
@@ -2801,7 +2895,7 @@ namespace WaifuCardsBattle
                             luu_dem_suy_thoai_nguoi_choi--;
                     }
 
-                    if (nhin_thau_nguoi_choi == true) // 2 lượt
+                    if (nhin_thau_nguoi_choi == true)
                     {
                         if (luu_dem_nhin_thau_nguoi_choi == 1)
                         {
@@ -2810,10 +2904,17 @@ namespace WaifuCardsBattle
                         else
                             luu_dem_nhin_thau_nguoi_choi--;
                     }
+
+                    if (thien_duong_may == true) // Hiệu ứng thiên đường                
+                    {
+                        AI.Mau += 10;
+                        if (AI.Mau >= may_mau_toi_da)
+                            AI.Mau = may_mau_toi_da;
+                    }
                 }
-                else // Máy
+                else // Sau khi người kết thúc lượt
                 {
-                    if (giam_cong_nguoi_choi == true) // 1 lượt
+                    if (giam_cong_nguoi_choi == true)
                     {
                         giam_cong_nguoi_choi = false;
                         Nguoi.Cong *= 2;
@@ -2826,7 +2927,7 @@ namespace WaifuCardsBattle
                         dem_thoi_gian--;
                     }
 
-                    if (giam_thu_may == true) // 2 lượt
+                    if (giam_thu_may == true)
                     {
                         if (luu_dem_pha_giap_may == 1)
                         {
@@ -2837,7 +2938,7 @@ namespace WaifuCardsBattle
                             luu_dem_pha_giap_may--;
                     }
 
-                    if (tang_cong_nguoi_choi == true) // 2 lượt
+                    if (tang_cong_nguoi_choi == true)
                     {
                         if (luu_dem_sieu_tang_cuong_nguoi_choi == 1)
                         {
@@ -2848,7 +2949,7 @@ namespace WaifuCardsBattle
                             luu_dem_sieu_tang_cuong_nguoi_choi--;
                     }
 
-                    if (tang_giap_nguoi_choi == true) // 2 lượt
+                    if (tang_giap_nguoi_choi == true)
                     {
                         if (luu_dem_giap_ao_nguoi_choi == 1)
                         {
@@ -2859,7 +2960,7 @@ namespace WaifuCardsBattle
                             luu_dem_giap_ao_nguoi_choi--;
                     }
 
-                    if (tang_mau_ao_nguoi_choi == true) // 2 lượt
+                    if (tang_mau_ao_nguoi_choi == true)
                     {
                         if (luu_dem_mau_ao_nguoi_choi == 1)
                         {
@@ -2870,7 +2971,7 @@ namespace WaifuCardsBattle
                             luu_dem_mau_ao_nguoi_choi--;
                     }
 
-                    if (khien_bao_ve_nguoi_choi == true) // 2 lượt
+                    if (khien_bao_ve_nguoi_choi == true)
                     {
                         if (luu_dem_khien_bao_ve_nguoi_choi == 1)
                             khien_bao_ve_nguoi_choi = false;
@@ -2878,7 +2979,7 @@ namespace WaifuCardsBattle
                             luu_dem_khien_bao_ve_nguoi_choi--;
                     }
 
-                    if (dao_nguoc_nguoi_choi == true) // 1 lượt thì bình thường                
+                    if (dao_nguoc_nguoi_choi == true)                
                         dao_nguoc_nguoi_choi = false;
 
                     if (kiem_tra_bom_hen_gio_nguoi_choi == true)
@@ -2892,7 +2993,7 @@ namespace WaifuCardsBattle
                             luot_cho_bom_hen_gio_nguoi_choi--;
                     }
 
-                    if (cuong_hoa_nguoi_choi == true) // 2 lượt
+                    if (cuong_hoa_nguoi_choi == true)
                     {
                         if (luu_dem_cuong_hoa_nguoi_choi == 1)
                             cuong_hoa_nguoi_choi = false;
@@ -2900,7 +3001,7 @@ namespace WaifuCardsBattle
                             luu_dem_cuong_hoa_nguoi_choi--;
                     }
 
-                    if (suy_yeu_may == true) // 2 lượt
+                    if (suy_yeu_may == true)
                     {
                         if (luu_dem_suy_yeu_may == 1)
                             suy_yeu_may = false;
@@ -2908,7 +3009,7 @@ namespace WaifuCardsBattle
                             luu_dem_suy_yeu_may--;
                     }
 
-                    if (chuyen_doi_sat_thuong_may == true) // 2 lượt
+                    if (chuyen_doi_sat_thuong_may == true)
                     {
                         if (luu_dem_chuyen_doi_sat_thuong_may == 1)
                         {
@@ -2918,7 +3019,7 @@ namespace WaifuCardsBattle
                             luu_dem_chuyen_doi_sat_thuong_may--;
                     }
 
-                    if (giap_gai_nguoi_choi == true) // 2 lượt
+                    if (giap_gai_nguoi_choi == true)
                     {
                         if (luu_dem_giap_gai_nguoi_choi == 1)
                         {
@@ -2928,13 +3029,13 @@ namespace WaifuCardsBattle
                             luu_dem_giap_gai_nguoi_choi--;
                     }
 
-                    if (quay_roi_nguoi_choi == true) // 1 lượt thì bình thường                
+                    if (quay_roi_nguoi_choi == true)               
                         quay_roi_nguoi_choi = false;
 
-                    if (ep_buoc_nguoi_choi == true) // 1 lượt thì bình thường                
+                    if (ep_buoc_nguoi_choi == true)              
                         ep_buoc_nguoi_choi = false;
 
-                    if (suy_thoai_may == true) // 2 lượt
+                    if (suy_thoai_may == true)
                     {
                         if (luu_dem_suy_thoai_may == 1)
                         {
@@ -2945,7 +3046,7 @@ namespace WaifuCardsBattle
                             luu_dem_suy_thoai_may--;
                     }
 
-                    if (nhin_thau_may == true) // 2 lượt
+                    if (nhin_thau_may == true)
                     {
                         if (luu_dem_nhin_thau_may == 1)
                         {
@@ -2954,6 +3055,14 @@ namespace WaifuCardsBattle
                         else
                             luu_dem_nhin_thau_may--;
                     }
+
+                    if (thien_duong_nguoi_choi == true) // Hiệu ứng thiên đường                
+                    {
+                        Nguoi.Mau += 10;
+                        if (Nguoi.Mau >= nguoi_mau_toi_da)
+                            Nguoi.Mau = nguoi_mau_toi_da;
+                    }
+
                 }
             }    
             else // Vô hiệu trạng thái ảo
