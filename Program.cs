@@ -486,9 +486,19 @@ namespace WaifuCardsBattle
         static bool thien_duong_nguoi_choi = false;
         static bool thien_duong_may = false;
 
+        static TheKyNang KyNangDiaNguc = new TheKyNang(41, "Địa Ngục", "Thẻ Địa Ngục: Trong lúc còn hiệu lực, giảm 10% máu của đối thủ sau mỗi lượt.");
+        static public void DiaNguc()
+        {
+
+        }
+
+        static bool dia_nguc_nguoi_choi = false;
+        static bool dia_nguc_may = false;
+
         static TheKyNang[] MangKyNang = new TheKyNang[100];
         static TheKyNang[] MangKyNangAI = new TheKyNang[100];
-        static int so_luong_ky_nang = 40;
+        static int so_luong_ky_nang = 41;
+
         static int dem_hieu_ung = 1;
         static int so_luong_hieu_ung = 0;
         static string[] TenHieuUng = new string[100];
@@ -938,6 +948,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNang[dem - 4] = KyNangThienDuong;
                         break;
+                    case 41:
+                        if (dem <= 4)
+                            MangKyNang[dem] = KyNangDiaNguc;
+                        else
+                            LuuKyNang[dem - 4] = KyNangDiaNguc;
+                        break;
                 }
             }
             
@@ -1189,6 +1205,12 @@ namespace WaifuCardsBattle
                         else
                             LuuKyNangAI[demAI - 4] = KyNangThienDuong;
                         break;
+                    case 41:
+                        if (demAI <= 4)
+                            MangKyNangAI[demAI] = KyNangDiaNguc;
+                        else
+                            LuuKyNangAI[demAI - 4] = KyNangDiaNguc;
+                        break;
                 }
             }
 
@@ -1205,10 +1227,10 @@ namespace WaifuCardsBattle
             */
             MangKyNang[1] = KyNangThienDuong;
             MangKyNangAI[1] = KyNangThienDuong;
-            MangKyNang[2] = KyNangTanCongXuyenPha;
-            MangKyNangAI[2] = KyNangTanCongXuyenPha;
-            MangKyNang[3] = KyNangNhinThauDoiPhuong;
-            MangKyNangAI[3] = KyNangNhinThauDoiPhuong;
+            MangKyNang[2] = KyNangDiaNguc;
+            MangKyNangAI[2] = KyNangDiaNguc;
+            MangKyNang[3] = KyNangLuaChonMaQuai;
+            MangKyNangAI[3] = KyNangLuaChonMaQuai;
             MangKyNang[4] = KyNangLoiKeoCuaTuThan;
             MangKyNangAI[4] = KyNangLoiKeoCuaTuThan;
             
@@ -1648,17 +1670,17 @@ namespace WaifuCardsBattle
                     case ConsoleKey.P:
                         Console.Clear();
                         if (y == 28)
-                            ThongTin(1);
+                            ThongTinAI(1);
                         if (y == 30)
-                            ThongTin(2);
+                            ThongTinAI(2);
                         if (y == 32)
-                            ThongTin(3);
+                            ThongTinAI(3);
                         if (y == 34)
-                            ThongTin(4);
-                        if (kiem_tra_ky_nang == true)
+                            ThongTinAI(4);
+                        if (kiem_tra_ky_nangAI == true)
                         {
                             if (y == 36)
-                                ThongTin(5);
+                                ThongTinAI(5);
                         }
 
                         Console.Clear();
@@ -1965,6 +1987,47 @@ namespace WaifuCardsBattle
                 }
             }    
            
+        }
+
+        static void ThongTinAI(int id)
+        {
+            while (true)
+            {
+                Console.SetCursorPosition(4, 5);
+                if (ao_anh_may == false && ao_anh_nguoi_choi == false)
+                {
+                    switch (id)
+                    {
+                        case 1:
+                            Console.WriteLine(MangKyNangAI[1].Mo_ta);
+                            break;
+                        case 2:
+                            Console.WriteLine(MangKyNangAI[2].Mo_ta);
+                            break;
+                        case 3:
+                            Console.WriteLine(MangKyNangAI[3].Mo_ta);
+                            break;
+                        case 4:
+                            Console.WriteLine(MangKyNangAI[4].Mo_ta);
+                            break;
+                        case 5:
+                            Console.WriteLine(AI.Mo_ta_ky_nang_toi_thuong);
+                            break;
+                    }
+                }
+                else
+                    Console.Write("???");
+                Console.SetCursorPosition(4, 5);
+
+                ConsoleKeyInfo lua_chon = Console.ReadKey();
+
+                switch (lua_chon.Key)
+                {
+                    case ConsoleKey.Backspace:
+                        return;
+                }
+            }
+
         }
 
         static void KyNang(int id, bool luot_di)
@@ -2652,6 +2715,30 @@ namespace WaifuCardsBattle
                         }
                     }
                     break;
+                case 41:
+                    if (luot_di == true)
+                    {
+                        DiaNguc();
+                        if (dia_nguc_may == false)
+                        {
+                            TenHieuUngAI[dem_hieu_ungAI] = "Địa Ngục: - 10% máu/lượt.";
+                            dem_hieu_ungAI++;
+                            so_luong_hieu_ungAI++;
+                            dia_nguc_may = true;
+                        }
+                    }
+                    else
+                    {
+                        DiaNguc();
+                        if (dia_nguc_nguoi_choi == false)
+                        {
+                            TenHieuUng[dem_hieu_ung] = "Địa Ngục: - 10% máu/lượt.";
+                            dem_hieu_ung++;
+                            so_luong_hieu_ung++;
+                            dia_nguc_nguoi_choi = true;
+                        }
+                    }
+                    break;
             }
         }
 
@@ -2717,6 +2804,22 @@ namespace WaifuCardsBattle
                         }                              
                         break;
 
+                    case ConsoleKey.P:
+                        Console.Clear();
+                        if (y == 7)
+                            ThongTinLuaChonMaQuai(LuuKyNang[hien_thi_ky_nang].Mo_ta);
+                        if (y == 9)
+                            ThongTinLuaChonMaQuai(LuuKyNang[hien_thi_ky_nang + 1].Mo_ta);
+                        if (y == 11)
+                            ThongTinLuaChonMaQuai(LuuKyNang[hien_thi_ky_nang + 2].Mo_ta);
+                        if (y == 13)
+                            ThongTinLuaChonMaQuai(LuuKyNang[hien_thi_ky_nang + 3].Mo_ta);
+                        if (y == 15)
+                            ThongTinLuaChonMaQuai(LuuKyNang[hien_thi_ky_nang + 4].Mo_ta);
+
+                        Console.Clear();
+                        break;
+
                     case ConsoleKey.Enter:
                         Console.Clear();
                         if (y == 7)
@@ -2736,6 +2839,25 @@ namespace WaifuCardsBattle
                 Console.SetCursorPosition(x_tam, y_tam);
                 Console.Write("  ");
             }
+        }
+
+        static void ThongTinLuaChonMaQuai(string mo_ta)
+        {
+            while (true)
+            {
+                Console.SetCursorPosition(4, 5);
+                Console.WriteLine(mo_ta);
+                Console.SetCursorPosition(4, 5);
+
+                ConsoleKeyInfo lua_chon = Console.ReadKey();
+
+                switch (lua_chon.Key)
+                {
+                    case ConsoleKey.Backspace:
+                        return;
+                }
+            }
+
         }
 
         static void KyNangToiThuong(int id, bool luot_di)
@@ -2911,6 +3033,9 @@ namespace WaifuCardsBattle
                         if (AI.Mau >= may_mau_toi_da)
                             AI.Mau = may_mau_toi_da;
                     }
+
+                    if (dia_nguc_may == true) // Hiệu ứng địa ngục                
+                        AI.Mau -= ((AI.Mau * 10) / 100);
                 }
                 else // Sau khi người kết thúc lượt
                 {
@@ -3062,6 +3187,9 @@ namespace WaifuCardsBattle
                         if (Nguoi.Mau >= nguoi_mau_toi_da)
                             Nguoi.Mau = nguoi_mau_toi_da;
                     }
+
+                    if (dia_nguc_nguoi_choi == true) // Hiệu ứng địa ngục                
+                        Nguoi.Mau -= ((Nguoi.Mau * 10) / 100);
 
                 }
             }    
